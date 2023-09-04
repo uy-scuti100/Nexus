@@ -27,7 +27,7 @@ const Navbar = () => {
 
    const user = false;
    return (
-      <nav className="fixed flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto">
+      <nav className="fixed flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white dark:bg-background">
          <div className="text-2xl md:text-5xl logo ">
             {" "}
             <Image

@@ -1,9 +1,13 @@
+"use client";
 import { ThemeProvider } from "@/components/providers/theme/theme-provider";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastProvider } from "@/providers/toast-provider";
 import Navbar from "@/components/myComponents/Navbar";
+import { Provider } from "react-redux";
+import { store } from "@/state/store"; //persistor,
+// import { PersistGate } from "redux-persist/integration/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,14 +23,20 @@ export default function RootLayout({
 }) {
    return (
       <html lang="en">
-         <body className={inter.className}>
-            <ToastProvider />
-
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-               <Navbar />
-               {children}
-            </ThemeProvider>
-         </body>
+         <Provider store={store}>
+            {/* <PersistGate loading={null} persistor={persistor}> */}
+            <body className={inter.className}>
+               <ToastProvider />
+               <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem>
+                  <Navbar />
+                  {children}
+               </ThemeProvider>
+            </body>
+            {/* </PersistGate> */}
+         </Provider>
       </html>
    );
 }
