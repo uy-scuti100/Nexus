@@ -6,10 +6,11 @@ import Image from "next/image";
 import { signInWithEmailPasswordSuccess, logOut } from "../state/authSlice";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import { useRouter } from "next/navigation";
+import PopUpProvider from "@/components/myComponents/PopUpProvider";
+import Navbar from "@/components/myComponents/Navbar";
 
 interface User {
    email?: string;
@@ -23,8 +24,6 @@ const WelcomePage = () => {
    const [name, setName] = useState("");
    const dispatch = useDispatch();
    const router = useRouter();
-   // const [image, setImage] = useState("");
-   // const [image, setImage] = useState("");
    useEffect(() => {
       const fetchUser = async () => {
          try {
@@ -41,7 +40,7 @@ const WelcomePage = () => {
                setEmail(email);
                setImage(image);
                setName(name);
-               console.log(user);
+               // console.log(user);
 
                dispatch(signInWithEmailPasswordSuccess(user));
             }
@@ -57,7 +56,6 @@ const WelcomePage = () => {
          let { error } = await supabase.auth.signOut();
 
          if (!error) {
-            // Dispatch the logOut action to clear the user data in the Redux store
             dispatch(logOut());
             router.refresh();
          } else {
@@ -69,19 +67,27 @@ const WelcomePage = () => {
    };
 
    return (
-      <main className="pt-[200px] ">
-         <h1>Welcome!</h1>
-         <Image src={image} alt="user-image" width={200} height={200} />
-         <p>
-            Thank you for creating an account {name}. Please check your inbox at{" "}
-            {email} and click the link we sent to complete your account set-up.
-         </p>
-         <Button>Click here to resend the email</Button>
-         <Button variant="destructive" onClick={logOff}>
-            logout
-         </Button>
-         current user: {currentUser?.email}
-         current user: {currentUser?.id}
+      <main>
+         <Navbar />
+         <div className="pt-150px">
+            {/* <PopUpProvider
+               title="Account already exists"
+               message="There is an existing user with this email, would you try logging in?"
+            /> */}
+            <h1>Welcome!</h1>
+            <Image src={image} alt="user-image" width={200} height={200} />
+            <p>
+               Thank you for creating an account {name}. Please check your inbox
+               at {email} and click the link we sent to complete your account
+               set-up.
+            </p>
+            <Button>Click here to resend the email</Button>
+            <Button variant="destructive" onClick={logOff}>
+               logout
+            </Button>
+            current user: {currentUser?.email}
+            current user: {currentUser?.id}
+         </div>
       </main>
    );
 };

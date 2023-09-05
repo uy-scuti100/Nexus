@@ -1,0 +1,54 @@
+"use client";
+import { useContext, useEffect, useState } from "react";
+import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
+import { Button } from "../ui/button";
+import { ModeToggle } from "../providers/theme/theme-toggle";
+
+const OnboardNav = () => {
+   const { toggleFormModal, toggleJoinFormModal } = useContext(
+      ModalContext
+   ) as ModalContextProp;
+   const [navColor, setNavColor] = useState(false);
+   useEffect(() => {
+      const navColorChange = () => {
+         let screenHeight = window.scrollY;
+         if (screenHeight >= window.innerHeight) {
+            setNavColor(true);
+         } else {
+            setNavColor(false);
+         }
+      };
+      window.addEventListener("scroll", navColorChange);
+      return () => {
+         window.removeEventListener("scroll", navColorChange);
+      };
+   }, []);
+
+   return (
+      <nav
+         className={`transition-colors duration-700 fixed w-full px-6 py-4 ${
+            navColor ? "bg-background" : "bg-[#51b045]"
+         }  border-b border-black`}>
+         <div className="flex items-center self-center justify-between md:max-w-[1192px] mx-auto">
+            <div className="text-2xl md:text-5xl logo ">Nexus</div>
+            <div className="flex items-center gap-4">
+               <ModeToggle />
+               <Button
+                  variant="link"
+                  className="hidden text-xs text-black md:block"
+                  onClick={toggleFormModal}>
+                  Sign In
+               </Button>
+               <Button
+                  size="sm"
+                  className="text-xs bg-black rounded-3xl"
+                  onClick={toggleJoinFormModal}>
+                  Get started
+               </Button>
+            </div>
+         </div>
+      </nav>
+   );
+};
+
+export default OnboardNav;

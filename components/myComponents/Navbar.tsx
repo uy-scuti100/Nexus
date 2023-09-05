@@ -1,43 +1,17 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import avatar from "../../public/avatar.jpg";
-import darklogo from "../../public/download (3).png";
-import lightlogo from "../../public/download (2).png";
-import { useTheme } from "next-themes";
 import { ModeToggle } from "../providers/theme/theme-toggle";
+import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 
 const Navbar = () => {
-   const { setTheme, resolvedTheme } = useTheme();
-   const [logosrc, setLogoSrc] = useState(
-      resolvedTheme === "dark" ? darklogo : lightlogo
-   ); // Default to the light logo
-
-   useEffect(() => {
-      const handleThemeChange = () => {
-         if (resolvedTheme === "dark") {
-            setLogoSrc(darklogo);
-         } else {
-            setLogoSrc(lightlogo);
-         }
-      };
-
-      handleThemeChange();
-   }, [resolvedTheme]);
+   const { toggleFormModal } = useContext(ModalContext) as ModalContextProp;
 
    const user = false;
    return (
       <nav className="fixed flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white dark:bg-background">
-         <div className="text-2xl md:text-5xl logo ">
-            {" "}
-            <Image
-               src={logosrc}
-               width={150}
-               height={100}
-               alt="user-profile-img"
-               className="object-cover transition duration-300 hover:scale-110"
-            />
-         </div>
+         <div className="text-5xl logo ">Nexus</div>
          <div className="flex items-center gap-4">
             <ModeToggle />
             {user && (
