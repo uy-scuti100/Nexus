@@ -67,3 +67,10 @@
       font-family: "Comic Neue", cursive;
    }
 }
+
+@media screen and (max-width: 768px) {
+   .largeimage {
+      height: 100px;
+      width: 100px;
+   }
+}

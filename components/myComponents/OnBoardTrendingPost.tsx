@@ -1,29 +1,30 @@
 import { TrendingUp } from "lucide-react";
 import React from "react";
-import { PostsProp, posts } from "../../constants/posts/posts";
-import PostCard from "@/constants/posts/postCard";
+import {
+   LargePostComponent,
+   TrendingPostComponent,
+} from "./TrendingPostComponent";
+import CategoriesComponent from "../CategoriesComponent";
 
 export default function OnBoardTrendingPost() {
    return (
       <section className="pt-10">
-         <div className="flex items-center px-6 gap-3 ">
-            <span className="p-2 border border-b rounded-xl">
+         <div className="flex items-center gap-3">
+            <span className="p-2 border border-black/30 dark:border-primary rounded-xl">
                <TrendingUp className="w-4 h-4 " />
             </span>
-            Trending posts
+            Trending on Nexus
          </div>
-         <div className="grid md:grid-cols-2 lg:grid-cols-3 place-content-between gap-16 p-4">
-            {posts.map((post: PostsProp) => {
-               const { author, user_img, date, title } = post;
-               return (
-                  <PostCard
-                     title={title}
-                     date={date}
-                     user_img={user_img}
-                     author={author}
-                  />
-               );
-            })}
+         <TrendingPostComponent />
+         {/* seperator */}
+         <div className="border-b border-black/30 dark:border-white/20"></div>
+         <div className="grid gap-16 md:px-6 md:grid-cols-3 pt-14">
+            <div className="relative md:order-2 md:col-span-1">
+               <CategoriesComponent />
+            </div>
+            <div className="w-full md:order-1 md:col-span-2">
+               <LargePostComponent />
+            </div>
          </div>
       </section>
    );
