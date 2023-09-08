@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
-import { Button } from "../ui/button";
-import { ModeToggle } from "../providers/theme/theme-toggle";
+import { Button } from "../../ui/button";
+import { ModeToggle } from "../../providers/theme/theme-toggle";
 
 const OnboardNav = () => {
-   const { toggleFormModal, toggleJoinFormModal } = useContext(
+   const { toggleWelcomeFormModal, toggleJoinFormModal } = useContext(
       ModalContext
    ) as ModalContextProp;
    const [navColor, setNavColor] = useState(false);
@@ -26,22 +26,22 @@ const OnboardNav = () => {
 
    return (
       <nav
-         className={`z-50 transition-colors duration-700 fixed w-full px-6 py-4 ${
+         className={`z-20 transition-colors duration-700 fixed w-full px-6 py-4 ${
             navColor ? "bg-background" : "bg-[#51b045]"
          }  border-b border-black/30 dark:border-white/20`}>
          <div className="flex items-center self-center justify-between md:max-w-[1192px] mx-auto">
             <div className="text-2xl md:text-5xl logo ">Nexus</div>
             <div className="flex items-center gap-4">
-               <ModeToggle />
+               {/* <ModeToggle /> */}
                <Button
                   variant="link"
                   className="hidden text-xs text-black md:block"
-                  onClick={toggleFormModal}>
+                  onClick={toggleWelcomeFormModal}>
                   Sign In
                </Button>
                <Button
                   size="sm"
-                  className="text-xs bg-black rounded-3xl"
+                  className="text-xs transition-colors duration-300 bg-black rounded-3xl"
                   onClick={toggleJoinFormModal}>
                   Get started
                </Button>

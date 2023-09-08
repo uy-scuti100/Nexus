@@ -12,6 +12,7 @@
 /.next/
 /out/
 .env*
+trash.txt
 
 # production
 /build

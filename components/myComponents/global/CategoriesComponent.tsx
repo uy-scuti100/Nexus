@@ -1,7 +1,7 @@
-import { Badge } from "./ui/badge";
-import { categories } from "@/constants/posts/posts";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import { categories } from "../posts/posts";
+import { Badge } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CategoriesComponent = () => {
    return (

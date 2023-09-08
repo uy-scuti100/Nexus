@@ -1,30 +1,39 @@
 "use client";
 
-import OnboardNav from "@/components/myComponents/OnboardNav";
-import PopUpProvider from "@/components/myComponents/PopUpProvider";
+import OnboardNav from "@/components/myComponents/global/OnboardNav";
+import PopUpProvider from "@/components/providers/pop-up/PopUpProvider";
 import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 import { useContext } from "react";
-import svg from "../../public/onboard.svg";
+import svg from "../../../public/onboard.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
-import { CreateAccountComponent } from "@/components/myComponents/CreateAccountComponent";
-import OnBoardTrendingPost from "@/components/myComponents/OnBoardTrendingPost";
+import { CreateAccountComponent } from "@/components/myComponents/auths/CreateAccountComponent";
+import OnBoardTrendingPost from "./OnBoardTrendingPost";
 
-export default function Page() {
+export default function OnBoard() {
    const { openModal, openJoinModal, toggleJoinFormModal } = useContext(
       ModalContext
    ) as ModalContextProp;
+
    return (
       <main className="relative">
          {openModal && (
             <PopUpProvider>
-               <CreateAccountComponent title=" Welcome back." type="log in" />
+               <CreateAccountComponent
+                  title=" Welcome back."
+                  type="log in"
+                  question="No account? "
+               />
             </PopUpProvider>
          )}
          {openJoinModal && (
             <PopUpProvider>
-               <CreateAccountComponent title=" Join Nexus" type="sign up" />
+               <CreateAccountComponent
+                  title=" Join Nexus"
+                  type="sign in"
+                  question="Already have an account?"
+               />
             </PopUpProvider>
          )}
          <OnboardNav />
@@ -48,7 +57,7 @@ export default function Page() {
                      </div>
                      <div className="pt-10 text-center md:text-left">
                         <Button
-                           className="w-[200px] bg-black p-6  rounded-3xl "
+                           className="w-[200px] bg-black p-6 duration-300 transition-colors rounded-3xl "
                            onClick={toggleJoinFormModal}>
                            Start writing
                            <span className="w-4 h-4 ml-2">
@@ -69,7 +78,7 @@ export default function Page() {
                </div>
             </div>
             <div className="px-6">
-               <p className="pt-20 text-3xl font-medium text-center max-w-[1192px] mx-auto">
+               <p className="pt-20 text-xl md:text-3xl font-medium text-center max-w-[1192px] mx-auto">
                   Welcome aboard, fellow traveler. Let's embark on this exciting
                   journey together and see where the Nexus takes us.
                </p>

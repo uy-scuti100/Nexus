@@ -11,9 +11,9 @@ const PostCard: React.FC<PostsProp> = ({
    verified,
 }: PostsProp) => {
    return (
-      <Link href="/">
-         <div className="border-b px-4 py-4 rounded-xl border w-fit">
-            <div className="flex items-center gap-3">
+      <div className="px-4 py-4 border border-b rounded-xl w-fit md:min-w-[320px] min-w-[300px]">
+         <div className="flex items-center gap-3">
+            <Link href="/">
                <Image
                   src={user_img}
                   height={20}
@@ -21,14 +21,14 @@ const PostCard: React.FC<PostsProp> = ({
                   alt="author-img"
                   className="object-cover w-5 h-5 "
                />
-               <div>{author}</div>
-               {verified ? <BadgeCheck className="h-4 w-4" /> : ""}
-            </div>
-            <h1 className="text-xl font-bold py-3">{title}</h1>
-
-            <p className="text-sm text-foreground/50">{date}</p>
+            </Link>
+            <div className="text-sm logo">{author}</div>
+            {verified ? <BadgeCheck className="w-4 h-4" /> : ""}
          </div>
-      </Link>
+         <h1 className="py-3 text-lg font-bold">{title}</h1>
+
+         <p className="text-xs text-foreground/50">{date}</p>
+      </div>
    );
 };
 

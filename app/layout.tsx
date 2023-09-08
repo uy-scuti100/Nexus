@@ -7,6 +7,7 @@ import { ToastProvider } from "@/components/providers/toast/toast-provider";
 import { Provider } from "react-redux";
 import { store } from "@/state/store";
 import ModalContextProvider from "@/state/context/modalContext";
+import Footer from "@/components/myComponents/global/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
                      defaultTheme="system"
                      enableSystem>
                      {children}
+                     <Footer />
                   </ThemeProvider>
                </ModalContextProvider>
             </body>

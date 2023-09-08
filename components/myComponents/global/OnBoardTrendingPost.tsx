@@ -4,12 +4,12 @@ import {
    LargePostComponent,
    TrendingPostComponent,
 } from "./TrendingPostComponent";
-import CategoriesComponent from "../CategoriesComponent";
+import CategoriesComponent from "./CategoriesComponent";
 
 export default function OnBoardTrendingPost() {
    return (
       <section className="pt-10">
-         <div className="flex items-center gap-3">
+         <div className="flex items-center gap-3 px-6">
             <span className="p-2 border border-black/30 dark:border-primary rounded-xl">
                <TrendingUp className="w-4 h-4 " />
             </span>

@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey, {
-   auth: { persistSession: false },
+   auth: { persistSession: true },
 });
 
 export default supabase;

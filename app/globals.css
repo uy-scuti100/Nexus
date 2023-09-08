@@ -66,6 +66,9 @@
    .logo {
       font-family: "Comic Neue", cursive;
    }
+   .wally {
+      font-family: Walsheim;
+   }
 }
 
 @media screen and (max-width: 768px) {

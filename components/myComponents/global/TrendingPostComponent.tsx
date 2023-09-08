@@ -1,21 +1,18 @@
 import React from "react";
-import {
-   LargePostsProp,
-   PostsProp,
-   largePosts,
-   posts,
-} from "../../constants/posts/posts";
-import PostCard from "@/constants/posts/postCard";
-import LargePostCard from "@/constants/posts/largePostCard";
+import { LargePostsProp, PostsProp, largePosts, posts } from "../posts/posts";
+import PostCard from "../posts/postCard";
+import LargePostCard from "../posts/largePostCard";
 
 export const TrendingPostComponent = () => {
    return (
-      <div className="grid gap-16 px-6 py-8 md:grid-cols-2 lg:grid-cols-3 place-content-between">
+      <div className="grid px-6 py-8 gap-x-8 gap-y-4 md:grid-cols-2 lg:grid-cols-3 place-content-between">
          {posts.map((post: PostsProp, i: number) => {
             const { author, user_img, date, title, verified } = post;
             const postNumber = (i + 1).toString().padStart(2, "0");
             return (
-               <div key={i} className="flex gap-5">
+               <div
+                  key={i}
+                  className="flex gap-5 md:min-w-[320px] min-w-[300px]">
                   <span className="font-bold text-2xl text-foreground/30 font-[miracle] mt-5">
                      {postNumber}
                   </span>

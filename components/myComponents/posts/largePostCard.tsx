@@ -59,13 +59,13 @@ const LargePostCard: React.FC<LargePostsProp> = ({
                   alt="author-img"
                   className="object-cover w-5 h-5"
                />
-               <div>{author}</div>
+               <div className="text-sm logo">{author}</div>
                {verified ? <BadgeCheck className="w-4 h-4" /> : ""}
             </div>
-            <h1 className="text-xl font-bold">{title}</h1>
+            <h1 className="text-lg font-bold">{title}</h1>
 
             <div className="flex items-center justify-between">
-               <p className="text-sm text-foreground/50">{date}</p>
+               <p className="text-xs text-foreground/50">{date}</p>
                <BookmarkPlus />
             </div>
          </div>
