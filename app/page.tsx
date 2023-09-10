@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/hooks/useUser";
 import OnBoard from "@/components/myComponents/global/OnBoard";
 import { signInSuccess } from "@/state/authSlice";
 
@@ -28,7 +28,7 @@ const Page = () => {
       return <OnBoard />;
    }
    if (user) {
-      window.location.href = "/account";
+      window.location.href = "/posts";
    }
 
    return null;

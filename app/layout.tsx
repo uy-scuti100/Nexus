@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "@/state/store";
 import ModalContextProvider from "@/state/context/modalContext";
 import Footer from "@/components/myComponents/global/Footer";
+import Write from "@/components/myComponents/global/Write";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
                      enableSystem>
                      {children}
                      <Footer />
+                     <Write />
                   </ThemeProvider>
                </ModalContextProvider>
             </body>

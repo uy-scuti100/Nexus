@@ -1,37 +1,58 @@
+"use client";
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/state/store";
 import { ModeToggle } from "@/components/providers/theme/theme-toggle";
-import { User } from "@/types";
-import { useUser } from "@/lib/useUser";
+
+import { useUser } from "@/hooks/useUser";
 import avatar from "../../../public/png.png";
-import { Bell, Search } from "lucide-react";
+import { Bell, ChevronDown, Search } from "lucide-react";
+import SideNav from "./SideNav";
+import { useState } from "react";
+import Link from "next/link";
 
 const Navbar = () => {
+   const [sidenav, setSidenav] = useState(false);
    const { user } = useUser();
+   const toggleSideNav = () => {
+      setSidenav((prev) => !prev);
+   };
 
    return (
-      <nav className="fixed flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white dark:bg-background">
-         <div className="text-3xl md:text-4xl logo">Nexus</div>
+      <nav className="fixed z-50 flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white border-b border-black/20 dark:bg-background">
+         <Link href="/posts">
+            <div className="text-3xl cursor-pointer md:text-4xl logo">
+               Nexus
+            </div>
+         </Link>
+
          <div className="flex items-center gap-7">
-            <Search />
+            <Link href="/search">
+               <Search className="cursor-pointer" />
+            </Link>
             <div className="relative">
-               <div className="absolute px-2 rounded-[50%] left-3 -top-4 bg-eccentric text-white">
+               <div className="absolute px-1 text-xs font-bold text-white rounded-sm shadow-2xl left-3 -top-3 bg-eccentric shadow-white">
                   1
                </div>
-               <Bell />
+               <Bell className="cursor-pointer" />
             </div>
 
-            <div>
+            <div className="flex items-center gap-3">
                <Image
                   src={user ? (user?.avatarUrl as string) : avatar}
                   width={40}
                   height={40}
                   alt="user-profile-img"
-                  className="rounded-full border border-accent w-[40px] h-[40px]  hover:scale-110 transition duration-300 "
+                  className="rounded-full border border-accent w-[40px] h-[40px]  hover:scale-110 transition duration-300 cursor-pointer"
+                  onClick={toggleSideNav}
+               />
+               <ChevronDown
+                  className={`${
+                     sidenav ? "rotate-180" : "rotate-0"
+                  }  transition-transform duration-700 cursor-pointer`}
+                  onClick={toggleSideNav}
                />
             </div>
          </div>
+         <SideNav className={`${sidenav ? "right-0" : "-right-full"}`} />
       </nav>
    );
 };
