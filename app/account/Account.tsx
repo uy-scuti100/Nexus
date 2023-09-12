@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../../lib/supabaseClient";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import Link from "next/link";
 
 interface HashtagProp {
    user_id: string;
-   hasgtag_id: string;
+   hashtag_id: string;
    name: string;
 }
 interface HashtagIdProp {
@@ -46,24 +47,6 @@ const Account = () => {
       }
    }, [user]);
 
-   useEffect(() => {
-      const fetchHashtagId = async () => {
-         try {
-            const { data: hashtags, error } = await supabase
-               .from("user_hashtags")
-               .select("hashtag_id");
-            if (hashtags && !error) {
-               const hashtagIds = hashtags.map((item) => item.hashtag_id);
-               setHashtagId({ hashtag_id: hashtagIds });
-            }
-         } catch (error) {
-            console.error("Error fetching hashtag IDs:", error);
-         }
-      };
-
-      fetchHashtagId();
-   }, []);
-
    const logOff = async () => {
       setLoggingOut(true);
       try {
@@ -88,9 +71,9 @@ const Account = () => {
          <div className="py-3 text-sm font-black">{name}'s hashtags are:</div>
          <ul className="flex flex-col gap-7">
             {userHashtags?.map((hashtag: HashtagProp, i: number) => {
-               const { name } = hashtag;
+               const { name, hashtag_id } = hashtag;
                return (
-                  <Link href={`/hashtags/${hashtagId}`}>
+                  <Link href={`/hashtags/${hashtag_id}`}>
                      <li key={i} className="opacity-70">
                         {name}
                      </li>

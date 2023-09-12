@@ -2,16 +2,16 @@
 import Image from "next/image";
 import { ModeToggle } from "@/components/providers/theme/theme-toggle";
 
-import { useUser } from "@/hooks/useUser";
 import avatar from "../../../public/png.png";
 import { Bell, ChevronDown, Search } from "lucide-react";
 import SideNav from "./SideNav";
 import { useState } from "react";
 import Link from "next/link";
+import { useFetchUser } from "@/hooks/useFetchUser";
 
 const Navbar = () => {
    const [sidenav, setSidenav] = useState(false);
-   const { user } = useUser();
+   const { user } = useFetchUser();
    const toggleSideNav = () => {
       setSidenav((prev) => !prev);
    };
@@ -37,7 +37,7 @@ const Navbar = () => {
 
             <div className="flex items-center gap-3">
                <Image
-                  src={user ? (user?.avatarUrl as string) : avatar}
+                  src={user ? (user?.display_pic as string) : avatar}
                   width={40}
                   height={40}
                   alt="user-profile-img"
@@ -47,7 +47,7 @@ const Navbar = () => {
                <ChevronDown
                   className={`${
                      sidenav ? "rotate-180" : "rotate-0"
-                  }  transition-transform duration-700 cursor-pointer`}
+                  }  transition-transform duration-500 cursor-pointer`}
                   onClick={toggleSideNav}
                />
             </div>

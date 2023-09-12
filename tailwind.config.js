@@ -17,6 +17,15 @@ module.exports = {
     },
     extend: {
       colors: {
+       "wh-10":"hsl(var(--wh-10))",
+       "wh-50": "hsl(var(--wh-50))",
+       "wh-100": "hsl(var(--wh-100))",
+       "wh-300":  "hsl(var(--wh-300))",
+       "wh-500":  "hsl(var(--wh-500))",
+       "wh-900": "hsl(var(--wh-900))",
+       "accent-red": "hsl(var(--accent-red))",
+       "accent-orange": "hsl(var(--accent-red))",
+       "accent-green":  "hsl(var(--accent-green))",
         eccentric: "hsl(var(--eccentric))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

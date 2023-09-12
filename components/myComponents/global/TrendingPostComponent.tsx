@@ -1,12 +1,16 @@
 import React from "react";
-import { LargePostsProp, PostsProp, largePosts, posts } from "../posts/posts";
+import { LargePostsProp, largePosts } from "../posts/posts";
 import PostCard from "../posts/postCard";
+import { Post as PostProp } from "@/types";
 import LargePostCard from "../posts/largePostCard";
+import { usePost } from "@/hooks/usePost";
 
 export const TrendingPostComponent = () => {
+   const { posts, isError, isLoading } = usePost();
+
    return (
       <div className="grid px-6 py-8 gap-x-8 gap-y-4 md:grid-cols-2 lg:grid-cols-3 place-content-between">
-         {posts.map((post: PostsProp, i: number) => {
+         {posts?.map((post: PostProp, i: number) => {
             const { author, user_img, date, title, verified } = post;
             const postNumber = (i + 1).toString().padStart(2, "0");
             return (

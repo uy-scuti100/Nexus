@@ -27,6 +27,15 @@
       --ring: 247, 33%, 31%;
       --radius: 0.5rem;
       --eccentric: 359, 49%, 49%;
+      --wh-10: 240 5.9% 90%;
+      --wh-50: 240 5.9% 98%;
+      --wh-100: 240 5.9% 79%;
+      --wh-300: 240 5.9% 58%;
+      --wh-500: 240 5.9% 35%;
+      --wh-900: 240 5.9% 6%;
+      --accent-red: 29 79% 60%;
+      --accent-orange: 44 89% 69%;
+      --accent-green: 104 55% 81%;
    }
 
    .dark {
@@ -58,7 +67,7 @@
       @apply border-border;
    }
    body {
-      @apply transition-colors duration-700 bg-background text-foreground;
+      @apply transition-colors duration-500 bg-background text-foreground;
    }
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
    return (
-      <footer className="text-white bg-black border h-80 border-t-background dark:bg-white dark:text-black">
+      <footer className="mt-10 text-white bg-black border h-80 border-t-background dark:text-accent-orange">
          <div className="px-6 mx-auto ">
             <div className="py-6 text-5xl logo ">Nexus</div>
 

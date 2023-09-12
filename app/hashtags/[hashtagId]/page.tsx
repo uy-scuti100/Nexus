@@ -1,5 +1,5 @@
 "use client";
-import Category from "@/components/myComponents/global/Category";
+import Hashtag from "@/components/myComponents/global/Hashtag";
 import { useSingleHashtag } from "@/hooks/useFetchSingleHashtag";
 import Navbar from "@/components/myComponents/global/Navbar";
 import { useEffect, useState } from "react";
@@ -21,12 +21,12 @@ const page = () => {
    }, [hashtagData]);
 
    return (
-      <main>
+      <main className="px-6">
          {" "}
          <Navbar />
          <section className="pt-24">
             {" "}
-            <Category />
+            <Hashtag />
             <div>{hashtagId}</div>
             <div className="py-20 font-black ">{hashtagName}</div>
          </section>
