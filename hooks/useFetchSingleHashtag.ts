@@ -17,7 +17,7 @@ export const useSingleHashtag = (
       `hashtag-${hashtagId}`,
       () => fetchHashtagById(hashtagId),
       {
-         refreshInterval: 60000,
+         refreshInterval: 1800000, // 30 minutes
       }
    );
 

@@ -9,7 +9,9 @@ export const useCategory = (): {
    const { data: formattedCategories, error } = useSWR(
       "categories",
       fetchCategories,
-      { refreshInterval: 600000 }
+      {
+         refreshInterval: 1800000, // 30 minutes
+      }
    );
 
    const categories = formattedCategories || null;

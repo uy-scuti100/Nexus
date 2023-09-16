@@ -19,6 +19,7 @@ export async function fetchPosts(): Promise<Post[] | null> {
             category_name: post.category_name,
             updated_at: post.updated_at,
             author_verification: post.author_verification,
+            author_image: post.author_image,
          }));
 
          return formattedPost;

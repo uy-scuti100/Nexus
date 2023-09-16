@@ -16,7 +16,7 @@ export const useSingleCategory = (
       `category-${categoryId}`,
       () => fetchCategoryById(categoryId),
       {
-         refreshInterval: 60000,
+         refreshInterval: 1800000, // 30 minutes
       }
    );
 

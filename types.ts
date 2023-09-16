@@ -32,4 +32,5 @@ export interface Post {
    updated_at: Date;
    author_verification: boolean;
    author: string;
+   author_image: string;
 }

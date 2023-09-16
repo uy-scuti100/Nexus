@@ -1,8 +1,8 @@
 import { BadgeCheck, BookmarkPlus, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Post } from "@/types";
+import Link from "next/link";
 
 const CategoryCard = ({
    categoryPosts,
@@ -13,6 +13,7 @@ const CategoryCard = ({
       <div className="flex flex-col w-full gap-5">
          {categoryPosts?.map((post: Post, i: number) => {
             const {
+               id,
                author,
                image,
                snippet,
@@ -39,10 +40,13 @@ const CategoryCard = ({
                         style={{ objectFit: "cover" }}
                      />
                   </div>
+
                   <div className="w-full px-6 border-b border-black/50 dark:border-white" />
-                  <div className="py-4 text-2xl font-bold capitalize logo">
-                     {title}
-                  </div>
+                  <Link href={`/post/${id}`}>
+                     <div className="py-4 text-2xl font-bold capitalize logo">
+                        {title}
+                     </div>
+                  </Link>
                   <div className="w-full px-6 border-b border-black/50 dark:border-white" />
                   <div className="flex justify-between py-3 text-xs text-wh-300">
                      <div className="flex items-center gap-3 capitalize">

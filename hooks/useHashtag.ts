@@ -9,7 +9,9 @@ export const useHashtag = (): {
    const { data: formattedHashtags, error } = useSWR(
       "hashtags",
       fetchHashtags,
-      { refreshInterval: 600000 }
+      {
+         refreshInterval: 1800000, // 30 minutes
+      }
    );
 
    const hashtags = formattedHashtags || null;

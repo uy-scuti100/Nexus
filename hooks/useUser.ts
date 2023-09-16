@@ -8,7 +8,7 @@ export const useUser = (): {
    isError: boolean;
 } => {
    const { data: user, error } = useSWR("user", fetchUser, {
-      refreshInterval: 60000,
+      refreshInterval: 1800000,
    });
 
    return {

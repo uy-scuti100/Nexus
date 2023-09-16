@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { ModeToggle } from "@/components/providers/theme/theme-toggle";
 
 import avatar from "../../../public/png.png";
 import { Bell, ChevronDown, Search } from "lucide-react";
@@ -18,22 +17,26 @@ const Navbar = () => {
 
    return (
       <nav className="fixed z-50 flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white border-b border-black/20 dark:bg-background">
-         <Link href="/posts">
+         <Link href="/home">
             <div className="text-3xl cursor-pointer md:text-4xl logo">
                Nexus
             </div>
          </Link>
 
          <div className="flex items-center gap-7">
-            <Link href="/search">
-               <Search className="cursor-pointer" />
-            </Link>
-            <div className="relative">
-               <div className="absolute px-1 text-xs font-bold text-white rounded-sm shadow-2xl left-3 -top-3 bg-eccentric shadow-white">
-                  1
+            {user && (
+               <Link href="/search">
+                  <Search className="cursor-pointer" />
+               </Link>
+            )}
+            {user && (
+               <div className="relative">
+                  <div className="absolute px-1 text-xs font-bold text-white rounded-sm shadow-2xl left-3 -top-3 bg-accent-orange shadow-white">
+                     1
+                  </div>
+                  <Bell className="cursor-pointer" />
                </div>
-               <Bell className="cursor-pointer" />
-            </div>
+            )}
 
             <div className="flex items-center gap-3">
                <Image
@@ -44,12 +47,14 @@ const Navbar = () => {
                   className="rounded-full border border-accent w-[40px] h-[40px]  hover:scale-110 transition duration-300 cursor-pointer"
                   onClick={toggleSideNav}
                />
-               <ChevronDown
-                  className={`${
-                     sidenav ? "rotate-180" : "rotate-0"
-                  }  transition-transform duration-500 cursor-pointer`}
-                  onClick={toggleSideNav}
-               />
+               {user && (
+                  <ChevronDown
+                     className={`${
+                        sidenav ? "rotate-180" : "rotate-0"
+                     }  transition-transform duration-500 cursor-pointer`}
+                     onClick={toggleSideNav}
+                  />
+               )}
             </div>
          </div>
          <SideNav className={`${sidenav ? "right-0" : "-right-full"}`} />

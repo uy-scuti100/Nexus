@@ -78,6 +78,13 @@
    .wally {
       font-family: Walsheim;
    }
+   .dark.ql-toolbar button {
+      color: white;
+   }
+
+   .dark.ql-toolbar button:hover {
+      background-color: #555;
+   }
 }
 
 @media screen and (max-width: 768px) {

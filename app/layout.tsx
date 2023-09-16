@@ -12,10 +12,14 @@ import Write from "@/components/myComponents/global/Write";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+export const metadata = {
    title: "Nexus",
    description: "Fuel your curiosity by getting answers here",
 };
+// export const metadata = {
+//    title: "Blog AI App",
+//    description: "Blog built in Next JS that uses AI",
+//  };
 
 export default function RootLayout({
    children,
@@ -34,7 +38,7 @@ export default function RootLayout({
                      enableSystem>
                      {children}
                      <Footer />
-                     <Write />
+                     {/* <Write /> */}
                   </ThemeProvider>
                </ModalContextProvider>
             </body>

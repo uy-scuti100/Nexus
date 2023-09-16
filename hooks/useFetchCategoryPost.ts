@@ -13,7 +13,7 @@ export const useFetchCategoryPost = (
       categoryId ? `categoryPosts-${categoryId}` : null,
       () => fetchCategoryPost(categoryId),
       {
-         refreshInterval: 600000,
+         refreshInterval: 1800000, // 30 minutes
       }
    );
 

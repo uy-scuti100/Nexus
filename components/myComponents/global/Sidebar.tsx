@@ -6,6 +6,7 @@ import Ad2 from "../../../public/ad2.jpg";
 import SocialLinks from "./SocialLinks";
 import Subscribe from "./Subscribe";
 import { useFetchUser } from "@/hooks/useFetchUser";
+import { useTheme } from "next-themes";
 
 interface SidebarProp {
    type: "home" | "post";
@@ -16,6 +17,7 @@ const Sidebar = (props: SidebarProp) => {
    const [username, setUsername] = useState("");
    const [bio, setBio] = useState("");
    const { user } = useFetchUser();
+   const { theme } = useTheme();
    useEffect(() => {
       const image = user?.display_pic;
       const name = user?.display_name;
@@ -31,7 +33,7 @@ const Sidebar = (props: SidebarProp) => {
             Subscribe and Follow
          </h4>
          <div className="mx-5 my-5">
-            <SocialLinks isDark />
+            {theme === "dark" ? <SocialLinks /> : <SocialLinks isDark={true} />}
          </div>
          <Subscribe />
          <Image
