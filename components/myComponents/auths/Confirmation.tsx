@@ -12,7 +12,7 @@ const Confirmation = ({ email }: { email: string }) => {
                </CardTitle>
                <CardDescription className="pb-10 text-xl text-center">
                   Please check your inbox at{" "}
-                  <span className="font-bold text-primary">{email}</span> and
+                  <span className="font-bold text-primary dark:text-accent-orange">{email}</span> and
                   click the link we sent to continue.
                </CardDescription>
             </CardHeader>

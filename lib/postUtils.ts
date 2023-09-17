@@ -20,6 +20,9 @@ export async function fetchPosts(): Promise<Post[] | null> {
             updated_at: post.updated_at,
             author_verification: post.author_verification,
             author_image: post.author_image,
+            bookmark_count: post.bookmark_count,
+            likes_count: post.likes_count,
+            comments_count: post.comments_count,
          }));
 
          return formattedPost;

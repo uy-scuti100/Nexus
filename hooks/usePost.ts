@@ -4,7 +4,7 @@ import { fetchPosts } from "../lib/postUtils";
 
 export const usePost = () => {
    const { data, error } = useSWR("posts", fetchPosts, {
-      refreshInterval: 1800000, // 30 minutes
+      refreshInterval: 1000, // 30 minutes
    });
 
    const posts = data || null;

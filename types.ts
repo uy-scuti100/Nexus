@@ -33,4 +33,7 @@ export interface Post {
    author_verification: boolean;
    author: string;
    author_image: string;
+   bookmark_count: number;
+   likes_count: number;
+   comments_count: number;
 }
