@@ -1,11 +1,9 @@
-"use client";
 import { ThemeProvider } from "@/components/providers/theme/theme-provider";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastProvider } from "@/components/providers/toast/toast-provider";
-import { Provider } from "react-redux";
-import { store } from "@/state/store";
+// import { Provider } from "react-redux";
+// import { store } from "@/state/store";
 import ModalContextProvider from "@/state/context/modalContext";
 import Footer from "@/components/myComponents/global/Footer";
 import Write from "@/components/myComponents/global/Write";
@@ -28,21 +26,21 @@ export default function RootLayout({
 }) {
    return (
       <html lang="en">
-         <Provider store={store}>
-            <body className={`{inter.className} relative`}>
-               <ModalContextProvider>
-                  <ToastProvider />
-                  <ThemeProvider
-                     attribute="class"
-                     defaultTheme="system"
-                     enableSystem>
-                     {children}
-                     <Footer />
-                     {/* <Write /> */}
-                  </ThemeProvider>
-               </ModalContextProvider>
-            </body>
-         </Provider>
+         {/* <Provider store={store}> */}
+         <body className={`${inter.className} relative`}>
+            <ModalContextProvider>
+               <ToastProvider />
+               <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem>
+                  {children}
+                  <Footer />
+                  {/* <Write /> */}
+               </ThemeProvider>
+            </ModalContextProvider>
+         </body>
+         {/* </Provider> */}
       </html>
    );
 }
