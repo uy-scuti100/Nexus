@@ -17,10 +17,12 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                category_name,
                author_image,
                bookmark_count,
+               likes_count,
             } = post;
 
             return (
                <PostCard
+                  key={id}
                   author={author}
                   id={id}
                   image={image}
@@ -31,6 +33,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                   author_image={author_image}
                   bookmark_count={bookmark_count}
                   created_at={created_at}
+                  likes_count={likes_count}
                />
             );
          })}

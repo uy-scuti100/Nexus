@@ -73,8 +73,8 @@ const Account = () => {
             {userHashtags?.map((hashtag: HashtagProp, i: number) => {
                const { name, hashtag_id } = hashtag;
                return (
-                  <Link href={`/hashtags/${hashtag_id}`}>
-                     <li key={i} className="opacity-70">
+                  <Link key={i} href={`/hashtags/${hashtag_id}`}>
+                     <li  className="opacity-70">
                         {name}
                      </li>
                   </Link>

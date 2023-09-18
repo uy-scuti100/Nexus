@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { BadgeCheck, Heart, HeartCrack } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import supabase from "@/lib/supabaseClient";
 import { useFetchUser } from "@/hooks/useFetchUser";
+import { useTheme } from "next-themes";
 
 function cn(...classes: string[]) {
    return classes.filter(Boolean).join(" ");
@@ -23,7 +25,6 @@ interface PostCardProp {
    author_image: string;
    bookmark_count: number;
    likes_count: number;
-   comments_count: number;
 }
 
 const PostCard = ({
@@ -38,12 +39,11 @@ const PostCard = ({
    author_image,
    bookmark_count,
    likes_count,
-   comments_count,
 }: PostCardProp) => {
+   const { theme } = useTheme();
    const [isLoading, setLoading] = useState(true);
    const [bookmarkCount, setBookmarkCount] = useState(bookmark_count);
    const [likeCount, setLikeCount] = useState(likes_count);
-   const [commentCount, setCommentCount] = useState(comments_count);
    const [isBookmarked, setIsBookmarked] = useState(false);
    const [isLiked, setIsLiked] = useState(false);
    const { user } = useFetchUser();
@@ -79,6 +79,26 @@ const PostCard = ({
       checkBookmarkStatus();
    }, [postId, userId]);
 
+   // Check if the user has liked the post
+   const checkLikeStatus = async () => {
+      if (postId && userId) {
+         const { data, error } = await supabase
+            .from("likes")
+            .select("*")
+            .eq("profile_id", userId)
+            .eq("post_id", postId);
+
+         if (data && data.length > 0) {
+            setIsLiked(true);
+         }
+      }
+   };
+
+   useEffect(() => {
+      checkLikeStatus();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [postId, userId]);
+
    //    toggle bookmark
    const toggleBookmark = async () => {
       if (isBookmarked) {
@@ -106,24 +126,6 @@ const PostCard = ({
          setBookmarkCount((prevCount) => prevCount + 1);
       }
    };
-   // Check if the user has liked the post
-   const checkLikeStatus = async () => {
-      if (postId && userId) {
-         const { data, error } = await supabase
-            .from("likes")
-            .select("*")
-            .eq("profile_id", userId)
-            .eq("post_id", postId);
-
-         if (data && data.length > 0) {
-            setIsLiked(true);
-         }
-      }
-   };
-
-   useEffect(() => {
-      checkLikeStatus();
-   }, [postId, userId]);
 
    // Toggle the like
    const toggleLike = async () => {
@@ -137,7 +139,7 @@ const PostCard = ({
 
          setIsLiked(false);
          // Decrement the like_count (if you have it)
-         setLikeCount((prevCount) => prevCount - 1);
+         setLikeCount((prevCount: any) => prevCount - 1);
       } else {
          // Add the like
          await supabase.from("likes").insert([
@@ -149,7 +151,7 @@ const PostCard = ({
 
          setIsLiked(true);
          // Increment the like_count (if you have it)
-         setLikeCount((prevCount) => prevCount + 1);
+         setLikeCount((prevCount: any) => prevCount + 1);
       }
    };
 
@@ -213,6 +215,7 @@ const PostCard = ({
                         fill="none"
                         // @ts-ignore
                         className="ut">
+                        <title>unbookmark</title>
                         <path
                            d="M7.5 3.75a2 2 0 0 0-2 2v14a.5.5 0 0 0 .8.4l5.7-4.4 5.7 4.4a.5.5 0 0 0 .8-.4v-14a2 2 0 0 0-2-2h-9z"
                            fill="currentcolor"></path>
@@ -223,9 +226,10 @@ const PostCard = ({
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill={theme === "dark" ? "#ffffff" : "#000"}
                         // @ts-ignore
                         className="no">
+                        <title>bookmark</title>
                         <path
                            d="M17.5 1.25a.5.5 0 0 1 1 0v2.5H21a.5.5 0 0 1 0 1h-2.5v2.5a.5.5 0 0 1-1 0v-2.5H15a.5.5 0 0 1 0-1h2.5v-2.5zm-11 4.5a1 1 0 0 1 1-1H11a.5.5 0 0 0 0-1H7.5a2 2 0 0 0-2 2v14a.5.5 0 0 0 .8.4l5.7-4.4 5.7 4.4a.5.5 0 0 0 .8-.4v-8.5a.5.5 0 0 0-1 0v7.48l-5.2-4a.5.5 0 0 0-.6 0l-5.2 4V5.75z"
                            fill="currentcolor"></path>
@@ -237,9 +241,33 @@ const PostCard = ({
             <div className="flex items-center gap-1">
                <button onClick={toggleLike}>
                   {isLiked ? (
-                     <Heart className="w-6 h-6" />
+                     <svg
+                        aria-label="Unlike"
+                        // @ts-ignore
+                        class="x1lliihq x1n2onr6"
+                        color="rgb(255, 48, 64)"
+                        fill={theme === "dark" ? "#ffffff" : "#000"}
+                        height="24"
+                        role="img"
+                        viewBox="0 0 48 48"
+                        width="24">
+                        <title>Unlike</title>
+                        <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                     </svg>
                   ) : (
-                     <HeartCrack className="w-6 h-6" />
+                     <svg
+                        aria-label="Like"
+                        // @ts-ignore
+                        class="x1lliihq x1n2onr6"
+                        color="#fff"
+                        fill="rgb(38, 38, 38)"
+                        height="24"
+                        role="img"
+                        viewBox="0 0 24 24"
+                        width="24">
+                        <title>Like</title>
+                        <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+                     </svg>
                   )}
                </button>
                <p>{likeCount > 0 ? <p>{likeCount}</p> : ""}</p>

@@ -306,10 +306,10 @@ const Content = ({ post, loading }: { post: any; loading: boolean }) => {
                   <div className="ql-snow">
                      <div className="ql-editor">
                         <ReactMarkdown
-                           children={content}
                            // @ts-ignore
-                           rehypePlugins={[rehypeRaw]}
-                        />
+                           rehypePlugins={[rehypeRaw]}>
+                           {content}
+                        </ReactMarkdown>
                      </div>
                   </div>
                   // <div

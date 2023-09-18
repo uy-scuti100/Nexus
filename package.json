@@ -59,6 +59,7 @@
       "react-redux": "^8.1.2",
       "redux-persist": "^6.0.0",
       "rehype-raw": "^7.0.0",
+      "sharp": "^0.32.5",
       "supabase-swr": "^1.0.0-alpha.4",
       "swr": "^2.2.2",
       "tailwind-merge": "^1.14.0",
@@ -68,6 +69,7 @@
       "zod": "^3.22.2"
    },
    "devDependencies": {
-      "@types/lodash.debounce": "^4.0.7"
+      "@types/lodash.debounce": "^4.0.7",
+      "eslint-config-prettier": "^9.0.0"
    }
 }

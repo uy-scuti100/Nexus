@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabaseClient";
 import Subscribe from "@/components/myComponents/global/Subscribe";
 import Sidebar from "@/components/myComponents/global/Sidebar";
 import { Post } from "@/types";
@@ -8,7 +7,7 @@ import CategoryCard from "./CategoryCard";
 import { useFetchCategoryPost } from "@/hooks/useFetchCategoryPost";
 import { useParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
    const params = useParams();
    const paramsId = params.categoriesId;
    // console.log(paramsId);
@@ -42,4 +41,4 @@ const page = () => {
    );
 };
 
-export default page;
+export default Page;

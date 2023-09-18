@@ -32,7 +32,7 @@ const OnboardNav = () => {
          <div className="flex items-center self-center justify-between md:max-w-[1192px] mx-auto">
             <div className="text-2xl md:text-5xl logo ">Nexus</div>
             <div className="flex items-center gap-4">
-               <ModeToggle />
+               {/* <ModeToggle /> */}
                <Button
                   variant="link"
                   className="hidden text-xs text-black dark:text-white md:block"

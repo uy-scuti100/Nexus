@@ -4,7 +4,7 @@ import { useSingleHashtag } from "@/hooks/useFetchSingleHashtag";
 import Navbar from "@/components/myComponents/global/Navbar";
 import { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
    const [hashtagId, setHashtagId] = useState<string | null | undefined>(null);
    const [hashtagName, setHashtagName] = useState<string | null | undefined>(
       null
@@ -34,4 +34,4 @@ const page = () => {
    );
 };
 
-export default page;
+export default Page;

@@ -50,7 +50,7 @@ export default function OnBoard() {
                         <h3 className="pt-6 text-base font-medium text-white/80 md:text-lg ">
                            Unlock a treasure trove of wisdom, explore
                            captivating narratives, and delve into the minds of
-                           experts from various domains right here. We're here
+                           experts from various domains right here. We are here
                            to satiate your thirst for knowledge and ignite your
                            curiosity.
                         </h3>
@@ -79,8 +79,8 @@ export default function OnBoard() {
             </div>
             <div className="px-6">
                <p className="pt-20 text-xl md:text-3xl font-medium text-center max-w-[1192px] mx-auto">
-                  Welcome aboard, fellow traveler. Let's embark on this exciting
-                  journey together and see where the Nexus takes us.
+                  Welcome aboard, fellow traveler. Let us embark on this
+                  exciting journey together and see where the Nexus takes us.
                </p>
             </div>
          </div>

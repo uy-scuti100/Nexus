@@ -12,7 +12,7 @@ const CategoriesComponent = () => {
          </div>
          <div className="flex flex-wrap items-center gap-6">
             {categories.slice(0, 12).map((cat: string, index: number) => (
-               <Link href="/">
+               <Link key={index} href="/">
                   <Badge
                      key={index}
                      className="py-2 transition-transform duration-300 bg-black hover:bg-black/30 hover:scale-105 dark:bg-primary dark:hover:bg-eccentric">
