@@ -35,5 +35,18 @@ export interface Post {
    author_image: string;
    bookmark_count: number;
    likes_count: number;
-   comments_count: number;
+   comment_count: number;
+}
+
+export interface Comment {
+   id: string;
+   content: string;
+   profile_id: string;
+   post_id: string;
+   comment_author_name: string;
+   comment_author_pic: string;
+   likes_count: number;
+   comment_count: number;
+   replies?: Comment[];
+   parent_comment_id?: string;
 }

@@ -22,7 +22,7 @@ export async function fetchPosts(): Promise<Post[] | null> {
             author_image: post.author_image,
             bookmark_count: post.bookmark_count,
             likes_count: post.likes_count,
-            comments_count: post.comments_count,
+            comment_count: post.comment_count,
          }));
 
          return formattedPost;

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { BadgeCheck, Heart, HeartCrack } from "lucide-react";
+import { BadgeCheck, MessageCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,6 +25,7 @@ interface PostCardProp {
    author_image: string;
    bookmark_count: number;
    likes_count: number;
+   comment_count: number;
 }
 
 const PostCard = ({
@@ -39,11 +40,13 @@ const PostCard = ({
    author_image,
    bookmark_count,
    likes_count,
+   comment_count,
 }: PostCardProp) => {
    const { theme } = useTheme();
    const [isLoading, setLoading] = useState(true);
    const [bookmarkCount, setBookmarkCount] = useState(bookmark_count);
    const [likeCount, setLikeCount] = useState(likes_count);
+   const [commentCount, setCommentcount] = useState(comment_count);
    const [isBookmarked, setIsBookmarked] = useState(false);
    const [isLiked, setIsLiked] = useState(false);
    const { user } = useFetchUser();
@@ -172,15 +175,18 @@ const PostCard = ({
                )}
                onLoadingComplete={() => setLoading(false)}
             />
+            <Badge variant="secondary" className="absolute top-2 right-2">
+               {category_name}
+            </Badge>
          </div>
-         <div className="w-full px-6 border-b border-black/50 dark:border-white" />
+         <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
          <Link href={`/post/${id}`}>
             <div className="py-4 text-2xl font-bold capitalize logo">
                {title}
             </div>
          </Link>
-         <div className="w-full px-6 border-b border-black/50 dark:border-white" />
-         <div className="flex items-center justify-between py-3 text-xs text-wh-300">
+         <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
+         <div className="flex items-center justify-between py-3 text-xs">
             <div className="flex items-center gap-3 capitalize">
                <Image
                   src={author_image}
@@ -196,14 +202,13 @@ const PostCard = ({
                   </span>
                </div>
             </div>
-            <div>{formattedDate}</div>
+            <div className="text-wh-300">{formattedDate}</div>
          </div>
          <div className="pt-3 pb-8 text-sm font-medium capitalize">
             {snippet}
          </div>
-         <div className="flex items-center justify-between">
-            <Badge variant="secondary">{category_name}</Badge>
-
+         <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
+         <div className="flex items-center justify-between pt-5 md:justify-normal md:gap-20">
             <div className="flex items-center gap-1">
                <button onClick={toggleBookmark}>
                   {isBookmarked ? (
@@ -223,8 +228,8 @@ const PostCard = ({
                   ) : (
                      // Not bookmarked
                      <svg
-                        width="20"
-                        height="20"
+                        width="24"
+                        height="24"
                         viewBox="0 0 24 24"
                         fill={theme === "dark" ? "#ffffff" : "#000"}
                         // @ts-ignore
@@ -238,6 +243,13 @@ const PostCard = ({
                </button>
                <p>{bookmarkCount > 0 ? <p>{bookmarkCount}</p> : ""}</p>
             </div>
+            <Link href={`/post/${postId}`}>
+               <div className="flex items-center gap-1">
+                  <MessageCircle className="w-6 h-6 opacity-70" />
+                  <p>{commentCount > 0 ? <p>{commentCount}</p> : ""}</p>
+               </div>
+            </Link>
+
             <div className="flex items-center gap-1">
                <button onClick={toggleLike}>
                   {isLiked ? (
@@ -256,6 +268,7 @@ const PostCard = ({
                      </svg>
                   ) : (
                      <svg
+                        className="opacity-70"
                         aria-label="Like"
                         // @ts-ignore
                         class="x1lliihq x1n2onr6"
@@ -278,3 +291,7 @@ const PostCard = ({
 };
 
 export default PostCard;
+
+{
+   /* <Badge variant="secondary">{category_name}</Badge> */
+}

@@ -18,6 +18,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                author_image,
                bookmark_count,
                likes_count,
+               comment_count,
             } = post;
 
             return (
@@ -34,6 +35,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                   bookmark_count={bookmark_count}
                   created_at={created_at}
                   likes_count={likes_count}
+                  comment_count={comment_count}
                />
             );
          })}

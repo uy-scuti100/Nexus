@@ -85,6 +85,48 @@
    .dark.ql-toolbar button:hover {
       background-color: #555;
    }
+   .parent-comment {
+      padding: 12px; /* Add padding for spacing */
+      background-color: #f7f7f7; /* Background color for parent comments */
+      border-radius: 8px; /* Rounded corners for parent comments */
+      margin-bottom: 12px; /* Margin between comments */
+      position: relative; /* For child comment border positioning */
+   }
+
+   /* Style for child comments */
+   .child-comment {
+      border-left: 2px solid #1da1f2; /* Left border for child comments */
+      padding-left: 14px; /* Add extra left padding */
+      margin-left: 2px; /* Slight indentation for child comments */
+      position: relative; /* For child comment border positioning */
+   }
+   .collapse-line {
+      border: none;
+      background: none;
+      padding: 0;
+      width: 15px;
+      margin-top: 0.5rem;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transform: translateX(-50%);
+   }
+
+   .collapse-line:hover::before,
+   .collapse-line:focus-visible::before {
+      background-color: hsl(235, 100%, 60%);
+   }
+
+   .collapse-line::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: hsl(235, 50%, 74%);
+      transition: background-color 100ms ease-in-out;
+   }
 }
 
 @media screen and (max-width: 768px) {
