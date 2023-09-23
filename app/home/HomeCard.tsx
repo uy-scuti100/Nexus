@@ -3,6 +3,7 @@ import { Post } from "@/types";
 import PostCard from "./PostCard";
 
 const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
+   const postImageUrl = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL;
    return (
       <div className="flex flex-col w-full gap-5">
          {blogPosts?.map((post: Post) => {
@@ -26,7 +27,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                   key={id}
                   author={author}
                   id={id}
-                  image={image}
+                  image={`${postImageUrl}${image}`}
                   snippet={snippet}
                   author_verification={author_verification}
                   title={title}

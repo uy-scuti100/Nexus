@@ -3,40 +3,97 @@ import { Textarea } from "@/components/ui/textarea";
 import { useFetchUser } from "@/hooks/useFetchUser";
 import supabase from "@/lib/supabaseClient";
 import { Comment } from "@/types";
-import { Edit, MessageCircle, Reply, Trash } from "lucide-react";
+import { Edit, Reply, Trash } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import toast from "react-hot-toast";
-
-type CachedReplies = Record<string, Comment[]>;
-
-// const cachedReplies: CachedReplies = {};
 
 const CommentCard = ({
    comment,
-   isChild,
+   fetchComments,
+   commentCount,
+   updateCommentCount,
 }: {
    comment: Comment;
-   isChild?: boolean;
+   fetchComments: () => void;
+   commentCount: number;
+   updateCommentCount: (newCount: number) => void;
 }) => {
+   const [content, setContent] = useState(comment?.content);
+   const [tempContent, setTempContent] = useState("");
+   const [isEditing, setIsEditing] = useState(false);
    const [isLiked, setIsLiked] = useState(false);
+   const [tempContentError, setTempContentError] = useState<string>("");
    const [showReplyForm, setShowReplyForm] = useState(false);
-   const [commentCount, setCommentcount] = useState(comment?.comment_count);
-   const [newReplies, setNewReplies] = useState<Comment[]>([]);
+   const [commentCounts, setCommentCounts] = useState(comment?.comment_count);
    const [likeCount, setLikeCount] = useState(comment?.likes_count);
    const [replyContent, setReplyContent] = useState("");
    const [replies, setReplies] = useState<Comment[]>([]);
+   const [areChildrenHidden, setAreChildrenHidden] = useState(true);
    const { theme } = useTheme();
    const { user } = useFetchUser();
    const userId = user?.id;
    const commentId = comment?.id;
+   /////////////////////////////////////////////////////////
 
-   const handleReplySubmit = async (e: any) => {
+   // useEffect(() => {
+   //    // Fetch the initial content when the component mounts
+   //    // You might want to add error handling here as well
+   //    async function fetchCommentContent() {
+   //       const { data, error } = await supabase
+   //          .from("comments")
+   //          .select("content")
+   //          .eq("id", commentId);
+
+   //       if (!error && data && data.length > 0) {
+   //          setContent(data[0].content);
+   //       }
+   //    }
+
+   //    fetchCommentContent();
+   // }, [commentId]);
+
+   const handleEditClick = (contentToEdit: string) => {
+      // Set the temporary content to the content of the comment being edited
+      setTempContent(contentToEdit);
+      setIsEditing(true);
+   };
+
+   const handleRevertClick = () => {
+      // Revert to the previous content
+      // setTempContent(content);
+      setIsEditing(false);
+   };
+
+   const handleSaveClick = async () => {
+      if (tempContent.trim() === "") {
+         setTempContentError("Comment field cant be empty.");
+         return;
+      }
+      const { data, error } = await supabase
+         .from("comments")
+         .update({ content: tempContent })
+         .eq("id", commentId)
+         .select();
+
+      if (!error && data && data.length > 0) {
+         fetchComments();
+         setTempContent("");
+         setContent(tempContent);
+         setIsEditing(false);
+      }
+   };
+   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      // Update the temporary content as the user types
+      setTempContent(e.target.value);
+   };
+
+   //  function to reply to a comment
+   const handleReplySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       try {
-         // Make an API request to insert the new reply into the 'comments' table
          const { data, error } = await supabase.from("comments").upsert([
             {
                content: replyContent,
@@ -46,31 +103,26 @@ const CommentCard = ({
          ]);
 
          if (error) {
-            // Handle the error, e.g., display an error message to the user.
             console.error("Error inserting reply:", error.message);
          } else {
-            // The reply has been successfully inserted.
-            // You can handle the success, e.g., by updating your UI to display the new reply.
-
-            if (data !== null) {
-               setReplies((prevReplies) => [...prevReplies, data[0]]);
-            }
-
+            fetchReplies();
             setReplyContent("");
             toast.success("reply sent");
+            setCommentCounts(commentCounts + 1);
             setShowReplyForm(false);
+            setAreChildrenHidden(false);
          }
       } catch (error) {
-         // Handle any unexpected errors that may occur during the API request.
          console.error("API request error:", error);
       }
    };
 
+   // function to toggle the reply textarea on and off
    const toggleReplyForm = () => {
       setShowReplyForm(!showReplyForm);
    };
-   // Check if the user has liked the post
 
+   // Check if the user has liked the post
    const checkLikeStatus = async () => {
       if (commentId && userId) {
          const { data, error } = await supabase
@@ -85,11 +137,7 @@ const CommentCard = ({
       }
    };
 
-   useEffect(() => {
-      checkLikeStatus();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [commentId, userId]);
-
+   // funtion to  toggle the like button
    const toggleLike = async () => {
       if (isLiked) {
          // Remove the like
@@ -116,29 +164,62 @@ const CommentCard = ({
          setLikeCount((prevCount: number): number => prevCount + 1);
       }
    };
-   useEffect(() => {
-      const fetchReplies = async () => {
+   // funtion to  fetch replies
+   const fetchReplies = async () => {
+      try {
          const { data, error } = await supabase
             .from("comments")
             .select("*")
             .eq("parent_comment_id", comment.id);
 
-         if (error) {
-            console.error("Error fetching replies:", error.message);
+         if (!error) {
+            setReplies(data || []);
          } else {
-            setReplies(data);
+            console.error("Error fetching replies:", error.message);
          }
-      };
+      } catch (error) {
+         console.error("Error fetching comments:", error);
+      }
+   };
 
+   // funtion todelete a comment
+   const handleDeleteComment = async () => {
+      try {
+         // Delete the comment and its associated replies
+         const { error } = await supabase
+            .from("comments")
+            .delete()
+            .eq("id", comment.id);
+
+         if (!error) {
+            updateCommentCount(commentCount - 1);
+
+            fetchComments();
+            toast.success("Comment Deleted!!!");
+         } else {
+            console.log("Error deleting comment:", error.message);
+         }
+      } catch (error) {
+         console.error("API request error:", error);
+      }
+   };
+
+   // useEffect to fetchReplies
+   useEffect(() => {
       fetchReplies();
    }, [comment]);
 
-   const [areChildrenHidden, setAreChildrenHidden] = useState(true);
+   //   useEffect to fire the checkLikeStatus
+   useEffect(() => {
+      checkLikeStatus();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [commentId, userId]);
+
    return (
       <>
          <div className="pb-3 mb-4">
-            <div className="p-4 border rounded-xl ">
-               <div key={comment.id} className="flex items-start gap-3 pb-4">
+            <div className="w-full p-4 border rounded-xl">
+               <div key={comment?.id} className="flex items-start gap-3 pb-4">
                   <Image
                      src={comment?.comment_author_pic}
                      alt="Comment Author"
@@ -146,15 +227,51 @@ const CommentCard = ({
                      width={48}
                      height={48}
                   />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col flex-1 ">
                      <div className="flex items-center mb-1">
                         <p className="font-semibold">
                            {comment?.comment_author_name}
                         </p>
                      </div>
-                     <p className="p-2 rounded-md bg-input">
-                        {comment?.content}
-                     </p>
+                     {isEditing ? (
+                        <div className="flex flex-col gap-2">
+                           <textarea
+                              autoFocus={true}
+                              style={{
+                                 height: "50px",
+                                 resize: "none",
+                                 border: "1px solid #ccc",
+                              }}
+                              value={tempContent}
+                              onChange={
+                                 (e: ChangeEvent<HTMLTextAreaElement>) =>
+                                    handleInputChange(e) // Call handleInputChange with e.target.value
+                              }
+                           />
+
+                           {tempContentError && (
+                              <p className="mt-1 text-primary-500">
+                                 {tempContentError}
+                              </p>
+                           )}
+                           <div className="flex items-center justify-end ">
+                              <button
+                                 onClick={handleRevertClick}
+                                 className="px-5 py-2 mt-5 mr-3 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black ">
+                                 Revert
+                              </button>
+                              <button
+                                 onClick={handleSaveClick}
+                                 className="px-5 py-2 mt-5 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black">
+                                 Save
+                              </button>
+                           </div>
+                        </div>
+                     ) : (
+                        <p className="p-2 rounded-md bg-input">
+                           {comment?.content}
+                        </p>
+                     )}
                   </div>
                </div>
                <div className="flex items-center justify-end gap-5">
@@ -197,46 +314,56 @@ const CommentCard = ({
                      className="flex items-center gap-1 cursor-pointer"
                      onClick={toggleReplyForm}>
                      <Reply className="w-6 h-6 opacity-70" />
-                     <p>{commentCount > 0 ? <p>{commentCount}</p> : ""}</p>
+                     <p>{commentCounts > 0 ? <p>{commentCounts}</p> : ""}</p>
                   </div>
-                  {comment.profile_id === userId && (
+                  {comment?.profile_id === userId && (
                      <div
                         className="flex items-center gap-1 cursor-pointer"
-                        onClick={toggleReplyForm}>
+                        onClick={() => handleEditClick(comment?.content)}>
                         <Edit className="w-6 h-6 opacity-70" />
                      </div>
                   )}
 
-                  {comment.profile_id === userId && (
+                  {comment?.profile_id === userId && (
                      <div
                         className="flex items-center gap-1 cursor-pointer"
-                        onClick={toggleReplyForm}>
+                        onClick={handleDeleteComment}>
                         <Trash className="w-6 h-6 text-red-600 opacity-70" />
                      </div>
                   )}
                </div>
             </div>
             {showReplyForm && (
-               <div className="pl-8 mt-4">
-                  <Textarea
-                     placeholder="Reply to this comment..."
-                     style={{
-                        height: "100px",
-                        resize: "none",
-                     }}
-                     value={replyContent}
-                     onChange={(e) => setReplyContent(e.target.value)}
-                  />
+               <form onSubmit={handleReplySubmit}>
+                  <div className="pl-8 mt-4">
+                     <Textarea
+                        autoFocus
+                        placeholder="Reply to this comment..."
+                        style={{
+                           height: "100px",
+                           resize: "none",
+                        }}
+                        value={replyContent}
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                           setReplyContent(e.target.value)
+                        }
+                     />
 
-                  <div className="flex justify-end">
-                     <button
-                        type="submit"
-                        className="px-5 py-2 mt-5 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black"
-                        onClick={handleReplySubmit}>
-                        Post Reply
-                     </button>
+                     <div className="flex justify-end">
+                        <button
+                           type="button"
+                           className="px-5 py-2 mt-5 mr-3 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black"
+                           onClick={toggleReplyForm}>
+                           Cancel
+                        </button>
+                        <button
+                           type="submit"
+                           className="px-5 py-2 mt-5 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black">
+                           Post Reply
+                        </button>
+                     </div>
                   </div>
-               </div>
+               </form>
             )}
          </div>
          {replies?.length > 0 && (
@@ -248,8 +375,14 @@ const CommentCard = ({
                      onClick={() => setAreChildrenHidden(true)}
                   />
                   <div className="pl-[0.5rem] flex-grow">
-                     {replies.map((reply) => (
-                        <CommentCard key={reply.id} comment={reply} />
+                     {replies?.map((reply) => (
+                        <CommentCard
+                           key={reply.id}
+                           comment={reply}
+                           fetchComments={fetchComments}
+                           commentCount={commentCount}
+                           updateCommentCount={updateCommentCount}
+                        />
                      ))}
                   </div>
                </div>

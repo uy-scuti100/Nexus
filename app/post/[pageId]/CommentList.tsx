@@ -1,19 +1,29 @@
-import Image from "next/image";
 import React from "react";
 import CommentCard from "./CommentCard";
 import { Comment } from "@/types";
 
 interface CommentListProps {
    comments: Comment[];
+   fetchComments: () => void;
+   commentCount: number;
+   updateCommentCount: (newCount: number) => void;
 }
 
 const CommentList: React.FC<CommentListProps> = ({
    comments,
+   fetchComments,
+   commentCount,
+   updateCommentCount,
 }: CommentListProps) => {
    return (
       <div>
-         {comments.map((comment) => (
-            <CommentCard comment={comment} />
+         {comments?.map((comment) => (
+            <CommentCard
+               comment={comment}
+               fetchComments={fetchComments}
+               commentCount={commentCount}
+               updateCommentCount={updateCommentCount}
+            />
          ))}
       </div>
    );

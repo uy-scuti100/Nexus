@@ -1,6 +1,5 @@
 "use client";
 import Navbar from "@/components/myComponents/global/Navbar";
-// import { Post } from "@/types";
 import Content from "./Content";
 import Sidebar from "@/components/myComponents/global/Sidebar";
 import { useFetchSinglePost } from "@/hooks/useFetchSinglePost";

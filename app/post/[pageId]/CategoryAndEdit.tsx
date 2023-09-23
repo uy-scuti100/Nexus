@@ -1,6 +1,5 @@
 import { Post } from "@/types";
 import { X, PencilLine, Trash2 } from "lucide-react";
-import { useUser } from "@/hooks/useUser";
 import supabase from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
 import {
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useFetchUser } from "@/hooks/useFetchUser";
 
 type Props = {
    isEditable: boolean;
@@ -31,9 +31,17 @@ type Props = {
    tempSnippet: string;
    setTempSnippet: (tempSnippet: string) => void;
    post: Post;
+   postImage: any;
+   setPostImage: (postImage: any) => void;
+   tempPostImage: any;
+   setTempPostImage: (tempPostImage: any) => void;
 };
 
 const CategoryAndEdit = ({
+   postImage,
+   setPostImage,
+   tempPostImage,
+   setTempPostImage,
    isEditable,
    handleIsEditable,
    title,
@@ -52,6 +60,7 @@ const CategoryAndEdit = ({
    const handleEnableEdit = () => {
       handleIsEditable(!isEditable);
       setTempTitle(title);
+      setTempPostImage(postImage);
       setTempSnippet(snippet);
       setTempContent(content);
    };
@@ -60,10 +69,12 @@ const CategoryAndEdit = ({
       handleIsEditable(!isEditable);
       setTitle(tempTitle);
       setSnippet(tempSnippet);
+      setPostImage(tempPostImage);
       setTempContent(content);
    };
 
-   const { user } = useUser();
+   const { user } = useFetchUser();
+   const userId = user?.id;
 
    const handleDelete = async () => {
       try {
@@ -90,7 +101,7 @@ const CategoryAndEdit = ({
          <h4 className="px-5 py-2 text-sm font-bold bg-accent-orange tex-wh-900">
             {post?.category_name}
          </h4>
-         {post?.profile_id === user?.id && (
+         {post?.profile_id === userId && (
             <div className="mt-4">
                {isEditable ? (
                   <div className="flex justify-between gap-3">
@@ -110,13 +121,11 @@ const CategoryAndEdit = ({
                         <DialogContent>
                            <DialogHeader className="pt-5">
                               <DialogTitle>
-                                 Are you sure absolutely sure you want to delete
-                                 this post?
+                                 Are you sure you want to delete this post?
                               </DialogTitle>
                               <DialogDescription className="pt-3">
                                  This action cannot be undone. This will
-                                 permanently delete your post and remove your
-                                 post from our servers.
+                                 permanently delete your post.
                               </DialogDescription>
                            </DialogHeader>
                            <DialogFooter className="pt-5">

@@ -52,6 +52,7 @@ const PostCard = ({
    const { user } = useFetchUser();
    const userId = user?.id;
    const postId = id;
+   console.log(image);
 
    //    date formatting
    const date = new Date(created_at);
@@ -181,9 +182,7 @@ const PostCard = ({
          </div>
          <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
          <Link href={`/post/${id}`}>
-            <div className="py-4 text-2xl font-bold capitalize logo">
-               {title}
-            </div>
+            <div className="py-4 text-2xl font-bold capitalize">{title}</div>
          </Link>
          <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
          <div className="flex items-center justify-between py-3 text-xs">
