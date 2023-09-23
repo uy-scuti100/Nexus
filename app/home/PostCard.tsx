@@ -26,6 +26,7 @@ interface PostCardProp {
    bookmark_count: number;
    likes_count: number;
    comment_count: number;
+   profile_id: string;
 }
 
 const PostCard = ({
@@ -39,11 +40,16 @@ const PostCard = ({
    category_name,
    author_image,
    bookmark_count,
+   profile_id,
    likes_count,
    comment_count,
 }: PostCardProp) => {
    const { theme } = useTheme();
    const [isLoading, setLoading] = useState(true);
+   const [isAuthorized, setIsAuthorized] = useState<boolean | undefined>(
+      undefined
+   );
+
    const [bookmarkCount, setBookmarkCount] = useState(bookmark_count);
    const [likeCount, setLikeCount] = useState(likes_count);
    const [commentCount, setCommentcount] = useState(comment_count);
@@ -52,7 +58,6 @@ const PostCard = ({
    const { user } = useFetchUser();
    const userId = user?.id;
    const postId = id;
-   console.log(image);
 
    //    date formatting
    const date = new Date(created_at);
@@ -62,6 +67,31 @@ const PostCard = ({
       day: "numeric",
    } as any;
    const formattedDate = date.toLocaleDateString("en-US", options);
+
+   // auth check
+
+   useEffect(() => {
+      const fetchData = async () => {
+         try {
+            const { data: profiles, error } = await supabase
+               .from("profiles")
+               .select("isVerified")
+               .eq("id", profile_id)
+               .single();
+
+            if (error) {
+               console.error("Error fetching profile:", error);
+            } else {
+               const isAuthorized = profiles?.isVerified === true;
+
+               setIsAuthorized(isAuthorized);
+            }
+         } catch (error) {
+            console.error("An error occurred:", error);
+         }
+      };
+      fetchData();
+   }, [profile_id]);
 
    //    check for bookmark based on user
 
@@ -197,7 +227,7 @@ const PostCard = ({
                <div className="flex items-center gap-2">
                   <p>{author} </p>
                   <span>
-                     {author_verification && <BadgeCheck className="w-4 h-4" />}
+                     {isAuthorized && <BadgeCheck className="w-4 h-4" />}
                   </span>
                </div>
             </div>

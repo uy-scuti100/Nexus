@@ -38,23 +38,25 @@ type Props = {
 };
 
 const CategoryAndEdit = ({
-   postImage,
-   setPostImage,
-   tempPostImage,
-   setTempPostImage,
+   post,
    isEditable,
    handleIsEditable,
    title,
    setTitle,
-   setSnippet,
-   content,
-   snippet,
    tempTitle,
+   setTempTitle,
+   snippet,
+   setSnippet,
    tempSnippet,
    setTempSnippet,
-   setTempTitle,
+   content,
+   setContent,
+   tempContent,
    setTempContent,
-   post,
+   postImage,
+   setPostImage,
+   tempPostImage,
+   setTempPostImage,
 }: Props) => {
    const router = useRouter();
    const handleEnableEdit = () => {
@@ -68,9 +70,9 @@ const CategoryAndEdit = ({
    const handleCancelEdit = () => {
       handleIsEditable(!isEditable);
       setTitle(tempTitle);
+      setContent(tempContent);
       setSnippet(tempSnippet);
       setPostImage(tempPostImage);
-      setTempContent(content);
    };
 
    const { user } = useFetchUser();

@@ -3,7 +3,6 @@ import { Post } from "@/types";
 import PostCard from "./PostCard";
 
 const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
-   const postImageUrl = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL;
    return (
       <div className="flex flex-col w-full gap-5">
          {blogPosts?.map((post: Post) => {
@@ -15,6 +14,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                author_verification,
                title,
                created_at,
+               profile_id,
                category_name,
                author_image,
                bookmark_count,
@@ -27,7 +27,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                   key={id}
                   author={author}
                   id={id}
-                  image={`${postImageUrl}${image}`}
+                  image={image}
                   snippet={snippet}
                   author_verification={author_verification}
                   title={title}
@@ -37,6 +37,7 @@ const HomeCard = ({ blogPosts }: { blogPosts: Post[] | null | undefined }) => {
                   created_at={created_at}
                   likes_count={likes_count}
                   comment_count={comment_count}
+                  profile_id={profile_id}
                />
             );
          })}

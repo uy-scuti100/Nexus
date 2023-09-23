@@ -16,6 +16,7 @@ export async function fetchSingleUser(): Promise<User | null> {
             .single();
 
          if (currentUser) {
+            // console.log(currentUser);
             return currentUser;
          }
 

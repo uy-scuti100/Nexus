@@ -14,7 +14,7 @@ import rehypeRaw from "rehype-raw";
 import { useFetchUser } from "@/hooks/useFetchUser";
 import { useTheme } from "next-themes";
 import { Comment, Post } from "@/types";
-import { Camera, MessageCircle } from "lucide-react";
+import { BadgeCheck, Camera, Disc3, MessageCircle } from "lucide-react";
 import avatar from "../../../public/png.png";
 import { Textarea } from "@/components/ui/textarea";
 import CommentList from "./CommentList";
@@ -101,17 +101,19 @@ const formats = [
 
 const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    const postImageUrl = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL;
-   const originalPostImage = `${postImageUrl}${post?.image}`;
    const [tempPostImage, setTempPostImage] = useState<string | File | null>(
-      originalPostImage
+      post?.image
    );
    const [imageFile, setImageFile] = useState<File | null>(null);
    const { theme } = useTheme();
    const [isLoading, setLoading] = useState(true);
+   const [isEditing, setIsEditing] = useState(false);
    const [isEditable, setIsEditable] = useState<boolean>(false);
    const [commentText, setCommentText] = useState("");
    const [title, setTitle] = useState<string>(post?.title);
-   const [postImage, setPostImage] = useState<string | File | null>(null);
+   const [postImage, setPostImage] = useState<string | File | null>(
+      post?.image
+   );
    const [snippet, setSnippet] = useState<string>(post?.snippet);
    const [titleError, setTitleError] = useState<string | "">("");
    const [commentError, setCommentError] = useState<string | "">("");
@@ -130,6 +132,9 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    const [likeCount, setLikeCount] = useState(post?.likes_count || 0);
    const [isBookmarked, setIsBookmarked] = useState(false);
    const [isLiked, setIsLiked] = useState(false);
+   const [isAuthorized, setIsAuthorized] = useState<boolean | undefined>(
+      undefined
+   );
    const options = { year: "numeric", month: "long", day: "numeric" } as any;
    const date = post?.created_at ? new Date(post?.created_at) : null;
    const formattedDate = date?.toLocaleDateString("en-US", options);
@@ -139,6 +144,30 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    const userId = user?.id;
    const userImg = user?.display_pic;
    const postId = post?.id;
+   const profile_id = post?.profile_id;
+
+   useEffect(() => {
+      const fetchData = async () => {
+         try {
+            const { data: profiles, error } = await supabase
+               .from("profiles")
+               .select("isVerified")
+               .eq("id", profile_id)
+               .single();
+
+            if (error) {
+               console.error("Error fetching profile:", error);
+            } else {
+               const isAuthorized = profiles?.isVerified === true;
+
+               setIsAuthorized(isAuthorized);
+            }
+         } catch (error) {
+            console.error("An error occurred:", error);
+         }
+      };
+      fetchData();
+   }, [profile_id]);
 
    const updateCommentCount = (newCount: number) => {
       setCommentCount(newCount);
@@ -160,10 +189,10 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
       setSnippet(e.target.value);
    };
 
-   const handleOnChangeContent = (content: string) => {
-      if (content.trim() !== "<p><br></p>") setContentError("");
-      setContent(tempContent);
-   };
+   // const handleOnChangeContent = (content: string) => {
+   //    if (content.trim() !== "<p><br></p>") setContentError("");
+   //    setContent(con);
+   // };
    const handleOnChangePostImage = (e: React.ChangeEvent<HTMLInputElement>) => {
       const selectedFile = e.target.files?.[0]; // Safely access the selected file
 
@@ -207,11 +236,18 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
       // Upload the new image if it has changed
       if (imageFile) {
          try {
-            // Replace 'your_bucket_name' with your actual bucket name
+            setIsEditing(true);
+
+            const randomSuffix = Math.floor(
+               1000000000 + Math.random() * 9000000000
+            ).toString();
+
+            // Append the random number to the image name
+            const imageName = `${randomSuffix}-${imageFile.name}`;
             const { data: imageUploadData, error: imageUploadError } =
                await supabase.storage
                   .from("post_images")
-                  .upload(`${imageFile.name}`, tempPostImage, {
+                  .upload(`${imageName}`, tempPostImage, {
                      cacheControl: "3600",
                      upsert: false,
                   });
@@ -222,7 +258,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                console.log(tempPostImage, currentImage);
                return;
             } else {
-               console.log("upload success", imageUploadData);
+               // console.log("upload success", imageUploadData);
             }
 
             // Update the post with the new data (including the updated image URL)
@@ -230,7 +266,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                title: title,
                snippet: snippet,
                content: content,
-               image: imageUploadData.path,
+               image: `${postImageUrl}${imageUploadData.path}`,
             };
 
             const { data: postUpdateData, error: postUpdateError } =
@@ -273,8 +309,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
             toast.success("Post Updated Successfully !");
          }
       }
-
-      // Update the state and reset isEditable
+      setIsEditing(false);
       setTitle(title || "");
       setSnippet(snippet || "");
       setContent(content || "");
@@ -518,10 +553,15 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                   ) : (
                      <p className="mt-3 mb-6 text-lg">{snippet}</p>
                   )}
-                  <div className="flex gap-3">
-                     <h5 className="text-xs font-semibold">
-                        By {post?.author}
-                     </h5>
+                  <div className="flex justify-between gap-3">
+                     <div className="flex items-center gap-2">
+                        <h5 className="text-xs font-semibold ">
+                           By {post?.author}{" "}
+                        </h5>
+                        <span>
+                           {isAuthorized && <BadgeCheck className="w-4 h-4" />}
+                        </span>
+                     </div>
                      <h6 className="text-xs text-wh-300">{formattedDate}</h6>
                   </div>
 
@@ -556,14 +596,13 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                            )}
 
                            {tempPostImage && (
-                              <Image
+                              <img
                                  src={
                                     typeof tempPostImage === "string"
-                                       ? `${postImageUrl}/${tempPostImage}` // Use tempPostImage here
+                                       ? `${post?.image}`
                                        : URL.createObjectURL(tempPostImage)
                                  }
                                  alt="Preview"
-                                 fill
                                  style={{ objectFit: "cover" }}
                                  className="-z-20"
                               />
@@ -575,7 +614,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                         <Image
                            fill
                            alt={post?.title}
-                           src={`${postImageUrl}/${post?.image}`}
+                           src={post?.image}
                            sizes="(max-width: 480px) 100vw, (max-width: 768px) 85vw, (max-width: 1060px) 75vw, 60vw"
                            style={{ objectFit: "cover" }}
                            className={cn(
@@ -598,10 +637,11 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                      {isEditable ? (
                         <ReactQuill
                            modules={modules}
-                           theme="snow"
                            formats={formats}
-                           value={content}
-                           onChange={handleOnChangeContent}
+                           style={{ height: "60vh" }}
+                           value={content} // or defaultValue={content}
+                           onChange={(value) => setContent(value)}
+                           placeholder="write your note"
                         />
                      ) : (
                         <div className="ql-snow">
@@ -621,7 +661,13 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                      <div className="flex justify-end">
                         <button
                            type="submit"
-                           className="px-5 py-2 mt-5 font-semibold bg-accent-red hover:bg-wh-500 text-wh-10 dark:text-black">
+                           disabled={isEditing}
+                           className={` ${
+                              isEditing ?? "bg-wh-500"
+                           } px-5 py-2 my-20 font-semibold bg-accent-red flex gap-1 items-center hover:bg-wh-500 text-wh-10 dark:text-black`}>
+                           {isEditing && (
+                              <Disc3 className="w-5 h-5 mr-3 animate-spin" />
+                           )}
                            SUBMIT
                         </button>
                      </div>
