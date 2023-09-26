@@ -9,6 +9,9 @@ import Image from "next/image";
 import { useState, useEffect, ChangeEvent } from "react";
 import toast from "react-hot-toast";
 
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 const CommentCard = ({
    comment,
    fetchComments,
@@ -228,9 +231,15 @@ const CommentCard = ({
                      height={48}
                   />
                   <div className="flex flex-col flex-1 ">
-                     <div className="flex items-center mb-1">
+                     <div className="flex items-center justify-between mb-1">
                         <p className="font-semibold">
                            {comment?.comment_author_name}
+                        </p>
+                        <p suppressHydrationWarning>
+                           {dayjs().diff(comment?.created_at, "seconds", true) <
+                           30
+                              ? "just now"
+                              : dayjs(comment?.created_at).fromNow()}
                         </p>
                      </div>
                      {isEditing ? (

@@ -112,7 +112,7 @@ const CategoryAndEdit = ({
                      </button>
                   </div>
                ) : (
-                  <div className="flex items-center gap-8">
+                  <div className="flex items-center gap-8 pb-8">
                      <button onClick={handleEnableEdit}>
                         <PencilLine className="w-6 h-6 text-accent-red" />
                      </button>

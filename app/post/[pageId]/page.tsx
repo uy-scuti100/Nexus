@@ -4,6 +4,7 @@ import Content from "./Content";
 import Sidebar from "@/components/myComponents/global/Sidebar";
 import { useFetchSinglePost } from "@/hooks/useFetchSinglePost";
 import { usePathname } from "next/navigation";
+import Write from "@/components/myComponents/global/Write";
 
 const Post = () => {
    const pathname = usePathname();
@@ -15,16 +16,14 @@ const Post = () => {
    }
 
    return (
-      <main className="leading-7">
+      <main className="relative leading-7">
          <Navbar />
-         <div className="gap-10 px-6 pt-32 mb-5 md:flex">
-            <div className="basis-3/4">
+         <div className="gap-10 px-6 pt-32 mb-5 md:px-32">
+            <div className="">
                <Content post={post} loading={isLoading} />
             </div>
-            <div className="basis-1/4">
-               <Sidebar type="home" />
-            </div>
          </div>
+         <Write />
       </main>
    );
 };

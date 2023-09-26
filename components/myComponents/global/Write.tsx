@@ -4,7 +4,7 @@ import React from "react";
 export default function Write() {
    return (
       <Link href="/write">
-         <div className="fixed p-5 transition bg-yellow-500 rounded-full shadow-lg bottom-4 md:bottom-7 right-4 md:right-12 hover:scale-105">
+         <div className="p-3 transition bg-yellow-500 rounded-full shadow-lg hover:scale-105">
             <svg
                width="24"
                height="24"

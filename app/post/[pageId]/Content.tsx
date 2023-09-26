@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import CommentList from "./CommentList";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+
 // import "./highlight.css";
 
 function cn(...classes: string[]) {
@@ -97,7 +98,13 @@ const formats = [
    "code-block",
    "video",
 ];
-//    check for bookmark based on user
+
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+   dateStyle: "medium",
+   timeStyle: "short",
+});
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
 
 const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    const postImageUrl = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL;
@@ -135,9 +142,6 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    const [isAuthorized, setIsAuthorized] = useState<boolean | undefined>(
       undefined
    );
-   const options = { year: "numeric", month: "long", day: "numeric" } as any;
-   const date = post?.created_at ? new Date(post?.created_at) : null;
-   const formattedDate = date?.toLocaleDateString("en-US", options);
    const imageInputRef = useRef<HTMLInputElement | null>(null);
    const router = useRouter();
    const { user } = useFetchUser();
@@ -487,7 +491,9 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
             <div className="w-full max-w-full mb-10 prose">
                {/* BREADCRUMBS */}
 
-               <h5 className="pb-5 text-wh-300">{`Home > ${post?.category_name} > ${post?.title}`}</h5>
+               <h5 className="pb-5 text-wh-300">{`Home > ${
+                  post?.category_name
+               } > ${post?.title.substring(0, 20)}...`}</h5>
 
                {/* CATEGORY AND EDIT */}
 
@@ -533,7 +539,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                         )}
                      </div>
                   ) : (
-                     <h3 className="mt-3 text-3xl font-bold">{title}</h3>
+                     <h3 className="mt-3 mb-6 text-3xl font-bold">{title}</h3>
                   )}
 
                   {/* SNIPPET */}
@@ -555,29 +561,34 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                   )}
                   <div className="flex justify-between gap-3">
                      <div className="flex items-center gap-2">
-                        <h5 className="text-xs font-semibold ">
-                           By {post?.author}{" "}
+                        <h5 className="text-lg font-semibold ">
+                           By {post?.author}
                         </h5>
                         <span>
                            {isAuthorized && <BadgeCheck className="w-4 h-4" />}
                         </span>
                      </div>
-                     <h6 className="text-xs text-wh-300">{formattedDate}</h6>
+                     <h6 className="text-lg text-wh-300">
+                        <p suppressHydrationWarning>
+                           {dayjs().diff(post?.created_at, "seconds", true) < 30
+                              ? "just now"
+                              : dayjs(post?.created_at).fromNow()}
+                        </p>
+                     </h6>
                   </div>
 
                   {/* IMAGE */}
                   {isEditable ? (
                      <>
                         <form className="relative py-10 my-10 mb-20 rounded-xl">
-                           <div className="absolute inset-0 -z-10 bg-white/20"></div>
-                           <h1 className="mt-4 mb-8 text-xl font-bold text-center text-black">
+                           <h1 className="mt-4 mb-8 text-xl font-bold text-center">
                               Change Post Image
                            </h1>
                            <label
                               htmlFor="postImage"
                               className="cursor-pointer ">
-                              <div className="flex items-center justify-center">
-                                 <Camera className="w-12 h-12 text-[#000000]" />
+                              <div className="flex items-center justify-center mb-8">
+                                 <Camera className="w-12 h-12" />
                               </div>
                            </label>
                            <input
@@ -596,16 +607,22 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                            )}
 
                            {tempPostImage && (
-                              <img
-                                 src={
-                                    typeof tempPostImage === "string"
-                                       ? `${post?.image}`
-                                       : URL.createObjectURL(tempPostImage)
-                                 }
-                                 alt="Preview"
-                                 style={{ objectFit: "cover" }}
-                                 className="-z-20"
-                              />
+                              <div className="flex items-center justify-center">
+                                 <img
+                                    src={
+                                       typeof tempPostImage === "string"
+                                          ? `${post?.image}`
+                                          : URL.createObjectURL(tempPostImage)
+                                    }
+                                    alt="Preview"
+                                    style={{
+                                       objectFit: "cover",
+                                       width: "100%",
+                                       height: "350px",
+                                    }}
+                                    className="-z-20"
+                                 />
+                              </div>
                            )}
                         </form>
                      </>
@@ -628,17 +645,13 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                      </div>
                   )}
 
-                  <div
-                     className={
-                        isEditable
-                           ? "bg-wh-50 dark:bg-black p-3"
-                           : "w-full max-w-full"
-                     }>
+                  <div className={isEditable ? "" : "w-full max-w-full"}>
                      {isEditable ? (
                         <ReactQuill
                            modules={modules}
                            formats={formats}
-                           style={{ height: "60vh" }}
+                           theme="snow"
+                           className="h-[80vh]"
                            value={content} // or defaultValue={content}
                            onChange={(value) => setContent(value)}
                            placeholder="write your note"
@@ -648,7 +661,8 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
                            <div className="ql-editor">
                               <ReactMarkdown
                                  // @ts-ignore
-                                 rehypePlugins={[rehypeRaw]}>
+                                 rehypePlugins={[rehypeRaw]}
+                                 className="text-lg leading-8 md:text-xl">
                                  {content}
                               </ReactMarkdown>
                            </div>

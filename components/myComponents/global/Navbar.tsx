@@ -7,9 +7,12 @@ import SideNav from "./SideNav";
 import { useState } from "react";
 import Link from "next/link";
 import { useFetchUser } from "@/hooks/useFetchUser";
+import { useRouter } from "next/navigation";
+import Write from "./Write";
 
 const Navbar = () => {
    const [sidenav, setSidenav] = useState(false);
+   const router = useRouter();
    const { user } = useFetchUser();
    const toggleSideNav = () => {
       setSidenav((prev) => !prev);
@@ -17,18 +20,19 @@ const Navbar = () => {
 
    return (
       <nav className="fixed z-50 flex items-center self-center justify-between w-full px-6 py-6 pt-6 mx-auto bg-white border-b border-black/20 dark:bg-background">
-         <Link href="/home">
-            <div className="text-3xl cursor-pointer md:text-4xl logo">
-               Nexus
-            </div>
-         </Link>
+         <div
+            className="text-3xl cursor-pointer md:text-4xl logo"
+            onClick={() => router.push("/home")}>
+            Nexus
+         </div>
 
          <div className="flex items-center gap-7">
-            {user && (
-               <Link href="/search">
-                  <Search className="cursor-pointer" />
-               </Link>
-            )}
+            <Write />
+
+            <Link href="/search">
+               <Search className="cursor-pointer" />
+            </Link>
+
             {user && (
                <div className="relative">
                   <div className="absolute px-1 text-xs font-bold text-white rounded-sm shadow-2xl left-3 -top-3 bg-accent-orange shadow-white">

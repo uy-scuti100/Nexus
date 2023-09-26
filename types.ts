@@ -28,7 +28,7 @@ export interface Post {
    content: string;
    image: string;
    snippet: string;
-   created_at: Date;
+   created_at: string;
    updated_at: Date;
    author_verification: boolean;
    author: string;
@@ -49,4 +49,5 @@ export interface Comment {
    comment_count: number;
    replies?: Comment[];
    parent_comment_id?: string;
+   created_at: Date;
 }

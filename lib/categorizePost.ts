@@ -1,56 +1,60 @@
-import natural from "natural";
-import { htmlToText, HtmlToTextOptions } from "html-to-text";
+// // Import necessary libraries
+// const { spawn } = require("child_process");
+// const natural = require("natural");
+// const { htmlToText, HtmlToTextOptions } = require("html-to-text");
 
-const tokenizer = new natural.WordTokenizer();
+// const tokenizer = new natural.WordTokenizer();
+// const stemmer = natural.PorterStemmer;
 
-function preprocessText(text: string): string[] {
-   // Convert HTML to plain text
-   const plainText = htmlToText(text, {
-      ignoreHref: true, // Ignore links
-      ignoreImage: true, // Ignore images
-   } as HtmlToTextOptions); // Use type assertion here
+// // Function for text preprocessing
+// function preprocessText(text: string) {
+//    // Convert HTML to plain text
+//    const plainText = htmlToText(text, {
+//       ignoreHref: true,
+//       ignoreImage: true,
+//    } as typeof HtmlToTextOptions);
 
-   // Tokenize the plain text
-   return tokenizer.tokenize(plainText.toLowerCase()) || [];
+//    // Tokenize the plain text
+//    const tokens = tokenizer.tokenize(plainText.toLowerCase());
+
+//    // Stem the tokens
+//    const stemmedTokens = tokens.map(stemmer.stem);
+
+//    return stemmedTokens.join(" "); // Join tokens back to text
+// }
+
+// // Define a function for categorization
+// function categorizePost(data: any, categories: any) {
+//    const contentText = data?.content || "";
+//    const preprocessedText = preprocessText(contentText);
+
+//    // Communicate with the Python script
+//    const pythonProcess = spawn("python", [
+//       "categorization_script.py",
+//       preprocessedText,
+//    ]);
+
+//    pythonProcess.stdout.on("data", (data: any) => {
+//       const selectedCategory = data.toString().trim();
+//       console.log(`Selected Category ID: ${selectedCategory}`);
+//       // Now you can use 'selectedCategory' in your JavaScript code
+//    });
+
+//    pythonProcess.stderr.on("data", (data: any) => {
+//       console.error(`Error: ${data}`);
+//    });
+// }
+
+// // Call categorizePost(data, categories) when needed
+
+import * as tf from "@tensorflow/tfjs-node";
+import { UniversalSentenceEncoder } from "@tensorflow-models/universal-sentence-encoder";
+
+const encoder = await UniversalSentenceEncoder.load();
+
+async function classifyBlogPost(text: string): Promise<string> {
+   const embeddings = await encoder.predict([text]);
+   // Get the predicted category
+   const category = predictions.item();
+   return category;
 }
-
-// Function to categorize a post based on content
-async function categorizePost(data: any, categories: any[]) {
-   const contentText = data.content || "";
-   const contentTokens: string[] = preprocessText(contentText);
-   const categoryScores: Record<string, number> = {};
-
-   // Calculate similarity scores for each category
-   for (const category of categories) {
-      const categoryKeywords: string[] = preprocessText(category.name);
-      const score: number = natural.JaroWinklerDistance(
-         contentTokens.join(" "),
-         categoryKeywords.join(" "),
-         {}
-      );
-
-      categoryScores[category.name] = score; // Assign category name instead of id
-   }
-
-   // Set a threshold for the similarity score to consider a category
-   const similarityThreshold = 0.7;
-
-   // Find the category with the highest score
-   const highestScoreCategory: string = Object.keys(categoryScores).reduce(
-      (a, b) => (categoryScores[a] > categoryScores[b] ? a : b)
-   );
-
-   // Check if the highest score is above the threshold
-   if (categoryScores[highestScoreCategory] >= similarityThreshold) {
-      // Set the category_name of the post to the name of the highest scoring category
-      data.category_name = highestScoreCategory;
-   } else {
-      // If no category meets the threshold, log an error message
-      console.error("No category meets the similarity threshold.");
-
-      // You can handle this case according to your needs.
-      // For example, you can create a "Default" category and set the category_name to it.
-   }
-}
-
-export { categorizePost };

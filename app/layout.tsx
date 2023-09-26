@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { ToastProvider } from "@/components/providers/toast/toast-provider";
 import ModalContextProvider from "@/state/context/modalContext";
 import Footer from "@/components/myComponents/global/Footer";
-import Write from "@/components/myComponents/global/Write";
+import { ReactQueryProvider } from "./ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,22 +19,24 @@ export default function RootLayout({
    children: React.ReactNode;
 }) {
    return (
-      <html lang="en">
-         {/* <Provider store={store}> */}
-         <body className={`${inter.className} relative`}>
-            <ModalContextProvider>
-               <ToastProvider />
-               <ThemeProvider
-                  attribute="class"
-                  defaultTheme="system"
-                  enableSystem>
-                  {children}
-                  <Footer />
-                  {/* <Write /> */}
-               </ThemeProvider>
-            </ModalContextProvider>
-         </body>
-         {/* </Provider> */}
-      </html>
+      <ReactQueryProvider>
+         <html lang="en">
+            {/* <Provider store={store}> */}
+            <body className={`${inter.className} relative`}>
+               <ModalContextProvider>
+                  <ToastProvider />
+                  <ThemeProvider
+                     attribute="class"
+                     defaultTheme="system"
+                     enableSystem>
+                     {children}
+                     <Footer />
+                     {/* <Write /> */}
+                  </ThemeProvider>
+               </ModalContextProvider>
+            </body>
+            {/* </Provider> */}
+         </html>
+      </ReactQueryProvider>
    );
 }

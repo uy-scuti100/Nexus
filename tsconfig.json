@@ -27,7 +27,8 @@
       "**/*.ts",
       "**/*.tsx",
       ".next/types/**/*.ts",
-      "webpack.config.js"
+      "webpack.config.js",
+      "middleware.js"
    ],
    "exclude": ["node_modules"]
 }

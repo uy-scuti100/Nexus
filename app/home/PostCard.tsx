@@ -13,6 +13,15 @@ function cn(...classes: string[]) {
    return classes.filter(Boolean).join(" ");
 }
 
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+   dateStyle: "medium",
+   timeStyle: "short",
+});
+
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
+
 interface PostCardProp {
    author: string;
    id: string;
@@ -20,7 +29,7 @@ interface PostCardProp {
    snippet: string;
    author_verification: boolean;
    title: string;
-   created_at: Date;
+   created_at: string;
    category_name: string;
    author_image: string;
    bookmark_count: number;
@@ -34,7 +43,6 @@ const PostCard = ({
    id,
    image,
    snippet,
-   author_verification,
    title,
    created_at,
    category_name,
@@ -60,13 +68,13 @@ const PostCard = ({
    const postId = id;
 
    //    date formatting
-   const date = new Date(created_at);
-   const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-   } as any;
-   const formattedDate = date.toLocaleDateString("en-US", options);
+   // const date = new Date(created_at);
+   // const options = {
+   //    year: "numeric",
+   //    month: "long",
+   //    day: "numeric",
+   // } as any;
+   // const formattedDate = date.toLocaleDateString("en-US", options);
 
    // auth check
 
@@ -224,17 +232,26 @@ const PostCard = ({
                   alt="user-profile-img"
                   className="border border-accent w-[24px] h-[24px]  cursor-pointer"
                />
-               <div className="flex items-center gap-2">
+               <div className="flex items-center gap-2 text-lg">
                   <p>{author} </p>
                   <span>
                      {isAuthorized && <BadgeCheck className="w-4 h-4" />}
                   </span>
                </div>
             </div>
-            <div className="text-wh-300">{formattedDate}</div>
+            <div className="text-lg text-wh-300">
+               {/* <p suppressHydrationWarning>
+                  {dateFormatter.format(Date.parse(created_at))}
+               </p>{" "} */}
+               <p suppressHydrationWarning>
+                  {dayjs().diff(created_at, "seconds", true) < 30
+                     ? "just now"
+                     : dayjs(created_at).fromNow()}
+               </p>
+            </div>
          </div>
-         <div className="pt-3 pb-8 text-sm font-medium capitalize">
-            {snippet}
+         <div className="pt-3 pb-8 text-lg font-medium capitalize">
+            {snippet.substring(0, 120)}...
          </div>
          <div className="w-full px-6 border-b border-black/10 dark:border-white/10" />
          <div className="flex items-center justify-between pt-5 md:justify-normal md:gap-20">

@@ -24,7 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import "react-quill/dist/quill.core.css";
 import "react-quill/dist/quill.snow.css";
 import "highlight.js/styles/atom-one-dark.css";
-import { categorizePost } from "@/lib/categorizePost";
+// import { categorizePost } from "@/lib/categorizePost";
 import { useFetchUser } from "@/hooks/useFetchUser";
 import {
    Select,
@@ -184,6 +184,8 @@ const PostForm = () => {
          // Categorize the post based on its content
          // const selectedCategory = categorizePost(data, categories);
 
+         // console.log("Selected Category:", selectedCategory);
+
          // Insert the post into the database
          const { data: post, error } = await supabase
             .from("posts")
@@ -191,7 +193,7 @@ const PostForm = () => {
                {
                   title: data.title,
                   profile_id: userId,
-                  // category_name: selectedCategory,
+                  // category_id: selectedCategory,
                   category_id: data.category_id,
                   snippet: data.snippet,
                   content: data.content,
@@ -203,7 +205,7 @@ const PostForm = () => {
          if (post) {
             router.push("/home");
             toast.success("Post Created");
-            console.log("Post:", post);
+            // console.log("Post:", post);
          } else {
             toast.error("Failed to create Post");
             // console.log(error.message);
@@ -250,7 +252,7 @@ const PostForm = () => {
                         name="image"
                         render={({ field }) => (
                            <FormItem>
-                              <FormLabel>Image</FormLabel>
+                              <FormLabel> Select a cover Image</FormLabel>
                               <FormControl>
                                  <div>
                                     <label
@@ -265,9 +267,9 @@ const PostForm = () => {
                                        accept="image/*"
                                        onChange={(e) => {
                                           uploadPostImage(e);
-                                          field.onChange(e.target.value); // Remove the { url: ... }
+                                          field.onChange(e.target.value);
                                        }}
-                                       value={field.value || ""} // Remove the .url
+                                       value={field.value || ""}
                                        disabled={loading}
                                        ref={imageInputRef}
                                        style={{ display: "none" }}

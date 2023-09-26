@@ -3,7 +3,10 @@ import supabase from "./supabaseClient";
 
 export async function fetchPosts(): Promise<Post[] | null> {
    try {
-      const { data: posts, error } = await supabase.from("posts").select("*");
+      const { data: posts, error } = await supabase
+         .from("posts")
+         .select("*")
+         .order("created_at", { ascending: false });
 
       if (posts && !error) {
          const formattedPost: Post[] = posts.map((post: Post) => ({
