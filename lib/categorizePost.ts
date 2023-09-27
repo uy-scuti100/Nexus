@@ -46,15 +46,3 @@
 // }
 
 // // Call categorizePost(data, categories) when needed
-
-import * as tf from "@tensorflow/tfjs-node";
-import { UniversalSentenceEncoder } from "@tensorflow-models/universal-sentence-encoder";
-
-const encoder = await UniversalSentenceEncoder.load();
-
-async function classifyBlogPost(text: string): Promise<string> {
-   const embeddings = await encoder.predict([text]);
-   // Get the predicted category
-   const category = predictions.item();
-   return category;
-}

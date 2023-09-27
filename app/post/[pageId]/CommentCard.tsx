@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
+
 const CommentCard = ({
    comment,
    fetchComments,
@@ -210,6 +211,7 @@ const CommentCard = ({
    // useEffect to fetchReplies
    useEffect(() => {
       fetchReplies();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [comment]);
 
    //   useEffect to fire the checkLikeStatus

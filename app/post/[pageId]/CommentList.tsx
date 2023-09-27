@@ -17,8 +17,9 @@ const CommentList: React.FC<CommentListProps> = ({
 }: CommentListProps) => {
    return (
       <div>
-         {comments?.map((comment) => (
+         {comments?.map((comment, i) => (
             <CommentCard
+               key={i}
                comment={comment}
                fetchComments={fetchComments}
                commentCount={commentCount}

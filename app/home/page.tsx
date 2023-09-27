@@ -1,12 +1,18 @@
+"use client";
 import Category from "@/components/myComponents/global/Category";
 import Navbar from "@/components/myComponents/global/Navbar";
 import Subscribe from "@/components/myComponents/global/Subscribe";
 import Sidebar from "@/components/myComponents/global/Sidebar";
-import HomeCard from "./HomeCard";
+import HomeCard from "./components/HomeCard";
+// import PostForm from "../../components/myComponents/global/PostForm";
+// import { useContext } from "react";
+// import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 
-const Page = () => {
+const page = () => {
+   // const { openJotter } = useContext(ModalContext) as ModalContextProp;
    return (
       <main className="relative">
+         {/* {openJotter && <PostForm />} */}
          <Navbar />
          <section className="px-6 pt-24">
             <Category />
@@ -27,4 +33,4 @@ const Page = () => {
    );
 };
 
-export default Page;
+export default page;

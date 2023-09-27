@@ -1,17 +1,18 @@
 "use client";
 import Image from "next/image";
-
 import avatar from "../../../public/png.png";
 import { Bell, ChevronDown, Search } from "lucide-react";
 import SideNav from "./SideNav";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import { useFetchUser } from "@/hooks/useFetchUser";
 import { useRouter } from "next/navigation";
 import Write from "./Write";
+import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 
 const Navbar = () => {
    const [sidenav, setSidenav] = useState(false);
+   const { toggleJotter } = useContext(ModalContext) as ModalContextProp;
    const router = useRouter();
    const { user } = useFetchUser();
    const toggleSideNav = () => {
@@ -27,7 +28,9 @@ const Navbar = () => {
          </div>
 
          <div className="flex items-center gap-7">
-            <Write />
+            <div onClick={toggleJotter}>
+               <Write />
+            </div>
 
             <Link href="/search">
                <Search className="cursor-pointer" />

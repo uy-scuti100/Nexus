@@ -1,9 +1,5 @@
-import { BadgeCheck, BookmarkPlus, User } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import PostCard from "@/app/home/components/PostCard";
 import { Post } from "@/types";
-import Link from "next/link";
-import PostCard from "@/app/home/PostCard";
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
-import PostCard from "../home/PostCard";
+import PostCard from "./PostCard";
 import { motion } from "framer-motion";
 
 interface PostCardProps {
@@ -105,11 +105,12 @@ export default function TicketsPage() {
       return () => {
          window.removeEventListener("scroll", handleScroll);
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    return (
       <>
-         <div className="flex flex-col w-full gap-5 px-6 pt-10">
+         <div className="flex flex-col w-full">
             {posts.map((post, index) => (
                <motion.div
                   key={post.id}

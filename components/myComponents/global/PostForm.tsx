@@ -1,6 +1,6 @@
 "use client";
 import * as z from "zod";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -33,6 +33,8 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
+import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 
 interface Category {
    id: string;
@@ -51,6 +53,7 @@ const formSchema = z.object({
 
 const PostForm = () => {
    const postImageUrl = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL;
+   const { toggleJotter } = useContext(ModalContext) as ModalContextProp;
    const [loading, setLoading] = useState(false);
    const [cats, setCats] = useState<Category[] | null>([]);
    const [postImage, setPostImage] = useState<string | File | null>(null);
@@ -225,20 +228,17 @@ const PostForm = () => {
       }
    };
 
-   const handleBack = () => {
-      window.history.back();
-   };
-
    return (
       <>
-         <div className=" max-w-[1104px] px-6 mx-auto py-6 mt-6">
-            <div className="flex items-center justify-end">
+         <div className="fixed inset-0 bg-background z-50 max-w-[1104px] px-6 mx-auto pt-24 py-6 mt-6 overflow-auto">
+            <div className="flex items-center justify-start mb-6">
                <Button
                   disabled={loading}
                   variant="outline"
                   size="sm"
-                  onClick={handleBack}>
-                  <ChevronLeft />
+                  onClick={toggleJotter}>
+                  <ChevronLeft className="h-6 w-6" />{" "}
+                  <span className="text-lg">Back</span>
                </Button>
             </div>
 
@@ -275,14 +275,12 @@ const PostForm = () => {
                                        style={{ display: "none" }}
                                     />
                                     {postImage instanceof File && (
-                                       <img
+                                       <Image
                                           src={URL.createObjectURL(postImage)}
                                           alt="Preview"
-                                          style={{
-                                             objectFit: "cover",
-                                             width: "100%",
-                                             height: "400px",
-                                          }}
+                                          width={400}
+                                          height={400}
+                                          className="h-[400px] w-full object-cover"
                                        />
                                     )}
                                  </div>

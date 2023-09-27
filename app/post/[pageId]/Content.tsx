@@ -366,6 +366,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
    // Fetch comments when the component mounts
    useEffect(() => {
       fetchComments();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    // comment like and bookmmark functionality
@@ -608,7 +609,7 @@ const Content = ({ post, loading }: { post: Post; loading: boolean }) => {
 
                            {tempPostImage && (
                               <div className="flex items-center justify-center">
-                                 <img
+                                 <Image
                                     src={
                                        typeof tempPostImage === "string"
                                           ? `${post?.image}`

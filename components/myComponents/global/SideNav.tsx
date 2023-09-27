@@ -1,9 +1,12 @@
+"use client";
 import { ModeToggle } from "@/components/providers/theme/theme-toggle";
 import supabase from "@/lib/supabaseClient";
+import { ModalContext, ModalContextProp } from "@/state/context/modalContext";
 import { LogOut, Settings } from "lucide-react";
-import Link from "next/link";
+import { useContext } from "react";
 
 export default function SideNav({ className }: { className: string }) {
+   const { toggleJotter } = useContext(ModalContext) as ModalContextProp;
    const logOff = async () => {
       try {
          const { error } = await supabase.auth.signOut();
@@ -20,27 +23,28 @@ export default function SideNav({ className }: { className: string }) {
 
    return (
       <nav
-         className={` ${className} transition-all rounded duration-500 ease z-40 md:w-[300px] overflow-x-hidden w-[200px] bg-background overflow-y-auto fixed top-[85px] shadow-lg`}>
+         className={` ${className} transition-all rounded duration-500 ease z-30 md:w-[300px] overflow-x-hidden w-[200px] bg-background overflow-y-auto fixed top-[85px] shadow-lg`}>
          <div className="p-4">
             <ul className="flex flex-col gap-8">
-               <Link href="/write">
-                  <li className="flex items-center gap-4 transition duration-300 cursor-pointer hover:opacity-75">
-                     <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        aria-label="Write">
-                        <path
-                           d="M14 4a.5.5 0 0 0 0-1v1zm7 6a.5.5 0 0 0-1 0h1zm-7-7H4v1h10V3zM3 4v16h1V4H3zm1 17h16v-1H4v1zm17-1V10h-1v10h1zm-1 1a1 1 0 0 0 1-1h-1v1zM3 20a1 1 0 0 0 1 1v-1H3zM4 3a1 1 0 0 0-1 1h1V3z"
-                           fill="currentColor"></path>
-                        <path
-                           d="M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5m-2-2l2 2"
-                           stroke="currentColor"></path>
-                     </svg>
-                     <span>Write</span>
-                  </li>
-               </Link>
+               <li
+                  className="flex items-center gap-4 transition duration-300 cursor-pointer hover:opacity-75"
+                  onClick={toggleJotter}>
+                  <svg
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     aria-label="Write">
+                     <path
+                        d="M14 4a.5.5 0 0 0 0-1v1zm7 6a.5.5 0 0 0-1 0h1zm-7-7H4v1h10V3zM3 4v16h1V4H3zm1 17h16v-1H4v1zm17-1V10h-1v10h1zm-1 1a1 1 0 0 0 1-1h-1v1zM3 20a1 1 0 0 0 1 1v-1H3zM4 3a1 1 0 0 0-1 1h1V3z"
+                        fill="currentColor"></path>
+                     <path
+                        d="M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5m-2-2l2 2"
+                        stroke="currentColor"></path>
+                  </svg>
+                  <span>Write</span>
+               </li>
+
                <li className="flex items-center gap-4 transition duration-300 cursor-pointer hover:opacity-75">
                   {" "}
                   <svg

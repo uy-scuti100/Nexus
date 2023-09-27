@@ -11,8 +11,10 @@ import {
 export interface ModalContextProp {
    toggleWelcomeFormModal: () => void;
    toggleJoinFormModal: () => void;
+   toggleJotter: () => void;
    toggleEmailFormModal: () => void;
    openModal: boolean;
+   openJotter: boolean;
    openJoinModal: boolean;
    openEmailCompModal: boolean;
    setOpenModal: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +32,7 @@ export default function ModalContextProvider({
    const [openModal, setOpenModal] = useState(false);
    const [openJoinModal, setOpenJoinModal] = useState(false);
    const [openEmailCompModal, setOpenEmailCompModal] = useState(false);
+   const [openJotter, setOpenJotter] = useState(false);
 
    const toggleWelcomeFormModal = () => {
       setOpenModal((prev) => !prev);
@@ -41,6 +44,9 @@ export default function ModalContextProvider({
       setOpenEmailCompModal((prev) => !prev);
    };
 
+   const toggleJotter = () => {
+      setOpenJotter((prev) => !prev);
+   };
    return (
       <ModalContext.Provider
          value={{
@@ -53,6 +59,8 @@ export default function ModalContextProvider({
             openJoinModal,
             setOpenJoinModal,
             toggleJoinFormModal,
+            openJotter,
+            toggleJotter,
          }}>
          {children}
       </ModalContext.Provider>
